@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Online Test Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -36,10 +36,9 @@
         @else
             <form action="/" method="post" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
-                    <label for="photo">Upload a Photo</label>
-                    <input type="file" name="photo1" id="photo" class="form-control">
-                </div>
+                <label class="block mb-2 text-sm font-medium text-gray-900" for="photo">Upload a Photo</label>
+                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" id="photo" type="file" name="photo1">
+
                 <!-- <div class="form-group">
                     <label for="photo">Upload a Photo</label>
                     <input type="file" name="photo2" id="photo" class="form-control">

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Aws\Rekognition\RekognitionClient;
 use Illuminate\Support\Facades\Storage;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class PhotosController extends Controller
 {
@@ -55,6 +55,5 @@ class PhotosController extends Controller
                 ]);
     
         return view('form', ['results' => $results]);
-        
     }
 }
