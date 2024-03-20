@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laravel + AWS Rekognition</title>
+    <title>Online Test Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
 </head>
 <body>
     <div class="container">
-
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
         <div class="jumbotron">
-            <h3>Try Laravel + AWS Rekognition SDK Integration</h3>
+            <h3>Validasi Wajah</h3>
         </div>
     
         @if(session('success'))
@@ -27,23 +37,47 @@
             <form action="/" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="confidence">Minimum Confidence</label>
-                    <input type="number" id="confidence" name="confidence" class="form-control" value="50">
-                </div>
-                <div class="form-group">
                     <label for="photo">Upload a Photo</label>
                     <input type="file" name="photo1" id="photo" class="form-control">
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="photo">Upload a Photo</label>
                     <input type="file" name="photo2" id="photo" class="form-control">
+                </div> -->
+                <div id="webcam-container">
+                    <!-- Webcam preview will be shown here -->
                 </div>
+                <input type="hidden" name="image" id="captured-image">
                 <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-success btn-lg">
+                    <input type="submit" value="Submit" class="btn btn-success btn-lg" ">
                 </div>
             </form>
         @endif
     
     </div>
+    <script language="JavaScript">
+        Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        
+        Webcam.attach('#webcam-container');
+        
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            captureImage();
+            this.submit(); // Submit the form after capturing the image
+        });
+        
+        function captureImage() {
+            Webcam.snap(function(data_uri) {
+                // Encode the captured image data as base64
+                var base64Image = data_uri.split(',')[1];
+                document.getElementById('captured-image').value = base64Image;
+            });
+        }
+    </script>
 </body>
 </html>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Aws\Rekognition\RekognitionClient;
+use Illuminate\Support\Facades\Storage;
+use Validator;
 
 class PhotosController extends Controller
 {
@@ -21,15 +23,27 @@ class PhotosController extends Controller
     
         $image1 = fopen($request->file('photo1')->getPathName(), 'r');
         $bytes1 = fread($image1, $request->file('photo1')->getSize());
-        $image2 = fopen($request->file('photo2')->getPathName(), 'r');
-        $bytes2 = fread($image2, $request->file('photo2')->getSize());
     
-            // $results = $client->detectFaces([
-            //     'Image' => [
-            //         'Bytes' => $bytes],
-            //         'MinConfidence' => intval($request->input('confidence'))
-            //     ]);
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|string',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Decode the base64-encoded image data
+        $imageData = base64_decode($request->input('image'));
+
+        // Save the image data to a file
+        $imageName = time() . '.jpg'; // Assume JPEG format
+        $imagePath = 'public/' . $imageName;
+
+        Storage::put($imagePath, $imageData);
+        
+        $image2 = fopen(public_path('storage/'. $imageName), 'r');
+        $bytes2 = fread($image2, filesize(public_path('storage/'. $imageName)));
+ 
             $results = $client->compareFaces([
                 'SimilarityThreshold' => 98,
                 'SourceImage' => [
@@ -41,5 +55,6 @@ class PhotosController extends Controller
                 ]);
     
         return view('form', ['results' => $results]);
+        
     }
 }
