@@ -21,8 +21,8 @@
     {{-- AOS CSS --}}
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
-    {{-- ReCAPTCHA --}}
-    {!! ReCaptcha::htmlScriptTagJsApi() !!}
+    {{-- ReCAPTCHA
+    {!! ReCaptcha::htmlScriptTagJsApi() !!} --}}
 
 </head>
 
@@ -49,7 +49,7 @@
             Dots: false,
         });
     </script>
-    @include('partials.footer')
+    {{-- @include('partials.footer') --}}
 </body>
 
 </html>
