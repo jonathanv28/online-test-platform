@@ -34,7 +34,7 @@
         @if(isset($results))
             {{ dd($results) }}
         @else
-            <form action="/" method="post" enctype="multipart/form-data">
+            <form action="/validate" method="post" enctype="multipart/form-data">
                 @csrf
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="photo">Upload a Photo</label>
                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" id="photo" type="file" name="photo1">

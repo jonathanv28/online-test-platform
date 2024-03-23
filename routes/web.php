@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PhotosController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +20,7 @@ use App\Http\Controllers\PhotosController;
 //     return view('welcome');
 // });
 
-Route::get('/', [PhotosController::class, 'showForm']);
-Route::post('/', [PhotosController::class, 'submitForm']);
+Route::get('/validate', [PhotosController::class, 'showForm']);
+Route::post('/validate', [PhotosController::class, 'submitForm']);
+Route::get('/', [LoginController::class, 'index']);
+Route::get('/register', [RegisterController::class, 'index']);
