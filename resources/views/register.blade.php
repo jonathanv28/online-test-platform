@@ -25,7 +25,7 @@
 <body class="font-inter">
     <div class="container mx-auto lg:px-20 xl:px-32 md:px-7 sm:px-7 max-[359px]:px-3 mt-12">
         <div class="w-full max-w-5xl p-4 bg-white rounded-lg sm:p-6 md:p-8 mx-auto">
-            @if (session()->has('loginError'))
+            @if (session()->has('registerError'))
                 <div id="alert-2" class="flex p-4 mb-4 text-red-700 bg-red-100 rounded-lg" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
                     </svg>
                     <span class="sr-only">Info</span>
                     <div class="ml-3 text-sm font-medium">
-                        {{ session('loginError') }}
+                        {{ session('registerError') }}
                     </div>
                     <button type="button"
                         class="ml-auto -mx-1.5 -my-1.5 bg-red-100 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8"
@@ -51,7 +51,7 @@
             @endif
 
             <h5 class="text-3xl font-bold text-darkblue ml-3.5 mb-5">Daftar</h5>
-            <form class="space-y-3.5 space-x-3.5" action="/login" method="POST">
+            <form class="space-y-3.5 space-x-3.5" action="/register" method="POST">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div>

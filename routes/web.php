@@ -28,4 +28,5 @@ Route::get('/validate', [PhotosController::class, 'showForm']);
 Route::post('/validate', [PhotosController::class, 'submitForm']);
 Route::get('/login', [LoginController::class, 'index']);
 Route::get('/register', [RegisterController::class, 'index']);
+Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/', [IndexController::class, 'visitHome']);

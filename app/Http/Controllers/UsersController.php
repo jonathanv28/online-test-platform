@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
 use App\Models\Users;
 
-class RegisterController extends Controller
+class UsersController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return view('register', [
-            'title' => 'Register | Online Test Platform',
-            'active' => 'login'
-        ]);
+        //
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -34,20 +36,7 @@ class RegisterController extends Controller
      */
     public function store(StoreUsersRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|unique:App\Models\Users,email',
-            'password' => 'required|max:255',
-            'repassword' => 'required|max:255',
-            'idcard' => 'image|required|string',
-            'photo' => 'image|required|string',
-            'institute' => 'required|max:255',
-            'phone' => 'required|max:255',
-        ]);
-
-        Users::create($validatedData);
-
-        return redirect('/login')->with('success', 'Akun berhasil dibuat!');
+        //
     }
 
     /**
@@ -95,4 +84,3 @@ class RegisterController extends Controller
         //
     }
 }
-
