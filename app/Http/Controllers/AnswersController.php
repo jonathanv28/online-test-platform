@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTestsRequest;
-use App\Http\Requests\UpdateTestsRequest;
-use App\Models\Test;
+use App\Models\Answers;
+use App\Http\Requests\StoreAnswersRequest;
+use App\Http\Requests\UpdateAnswersRequest;
 
-class TestsController extends Controller
+class AnswersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class TestsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTestsRequest  $request
+     * @param  \App\Http\Requests\StoreAnswersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTestsRequest $request)
+    public function store(StoreAnswersRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class TestsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Test  $tests
+     * @param  \App\Models\Answers  $answers
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $tests)
+    public function show(Answers $answers)
     {
         //
     }
@@ -53,10 +53,10 @@ class TestsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Test  $tests
+     * @param  \App\Models\Answers  $answers
      * @return \Illuminate\Http\Response
      */
-    public function edit(Test $tests)
+    public function edit(Answers $answers)
     {
         //
     }
@@ -64,11 +64,11 @@ class TestsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateTestsRequest  $request
-     * @param  \App\Models\Tests  $tests
+     * @param  \App\Http\Requests\UpdateAnswersRequest  $request
+     * @param  \App\Models\Answers  $answers
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTestsRequest $request, Test $tests)
+    public function update(UpdateAnswersRequest $request, Answers $answers)
     {
         //
     }
@@ -76,10 +76,10 @@ class TestsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Tests  $tests
+     * @param  \App\Models\Answers  $answers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $tests)
+    public function destroy(Answers $answers)
     {
         //
     }

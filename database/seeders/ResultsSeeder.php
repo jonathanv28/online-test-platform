@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Test;
+use App\Models\Result;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class TestsSeeder extends Seeder
+class ResultsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,11 +15,9 @@ class TestsSeeder extends Seeder
      */
     public function run()
     {
-        Test::create([
-            'title' => 'Mathematics Quiz',
-            'code' => '744E80F',
-            'image' => 'tests/mathematics.jpg',
-            'duration' => '20'
+        Result::create([
+            'user_id' => '1',
+            'test_id' => '1',
         ]);
     }
 }

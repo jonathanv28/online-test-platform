@@ -22,32 +22,34 @@
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                 data-dropdown-placement="bottom">
                 <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full object-cover" src="https://media.discordapp.net/attachments/412931424069484544/1222768176266219552/jonathan.png?ex=66176a9b&is=6604f59b&hm=ba3aa737823006ec64b183e766770c7dc98d2cddb8d4c45e8ad25eefe31a6a8c&=&format=webp&quality=lossless&width=233&height=350" alt="user photo">
+                <img class="w-8 h-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->photo)}}" alt="user photo">
             </button>
             <!-- Dropdown menu -->
             <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                 id="user-dropdown">
                 <div class="px-4 py-3">
-                    <span class="block text-sm text-gray-900 dark:text-white">Jonathan Victor</span>
-                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">jonathan@gmail.com</span>
+                    <span class="block text-sm text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>
+                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">{{ auth()->user()->email }}</span>
                 </div>
                 <ul class="py-2" aria-labelledby="user-menu-button">
                     <li>
                         <a href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
                     </li>
                     <li>
                         <a href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tambah Tes</a>
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tambah Tes</a>
                     </li>
                     <li>
                         <a href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Data Diri</a>
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Diri</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-                            out</a>
+                        <form action="/logout" method="POST" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            @csrf
+                            <button class="w-full text-left inline-block">Sign
+                                out</button>
+                        </form>
                     </li>
                 </ul>
             </div>

@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
             $table->string('code');
-            $table->string('link_image');
+            $table->string('image');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

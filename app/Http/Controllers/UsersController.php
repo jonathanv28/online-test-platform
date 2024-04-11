@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUsersRequest;
-use App\Http\Requests\UpdateUsersRequest;
-use App\Models\Users;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class UsersController extends Controller
 {
@@ -25,18 +26,50 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('register', [
+            'title' => 'Register | Online Test Platform',
+            'active' => 'register'
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreUsersRequest  $request
+     * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUsersRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email:dns|unique:App\Models\Users,email',
+            'password' => 'required|max:255|confirmed|min:8',
+            'idcard' => 'image|required|max:2048',
+            'photo' => 'image|required|max:2048',
+            'institute' => 'required|max:255',
+            'phone' => 'required|max:255',
+        ]);
+
+        $password =  Hash::make($request->password);
+        $validatedData['password'] = $password;
+
+        if ($request->file('idcard')) {
+            $idcard = $request->file('idcard');
+            $idcardName =  Hash::make($request->email) . '-idcard.jpg';
+            $idcard->storeAs('public/users', $idcardName);
+            $validatedData['idcard'] = $idcard->storeAs('users', $idcardName);
+        }
+
+        if ($request->file('photo')) {
+            $photo = $request->file('photo');
+            $photoName =  Hash::make($request->name) . '-photo.jpg';
+            $photo->storeAs('public/users', $photoName);
+            $validatedData['photo'] = $photo->storeAs('users', $photoName);
+        }
+
+        User::create($validatedData);
+
+        return redirect('/login')->with('success', 'Akun berhasil dibuat!');
     }
 
     /**
@@ -45,7 +78,7 @@ class UsersController extends Controller
      * @param  \App\Models\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function show(Users $users)
+    public function show(User $users)
     {
         //
     }
@@ -56,7 +89,7 @@ class UsersController extends Controller
      * @param  \App\Models\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function edit(Users $users)
+    public function edit(User $users)
     {
         //
     }
@@ -64,11 +97,11 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateUsersRequest  $request
+     * @param  \App\Http\Requests\Request  $request
      * @param  \App\Models\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUsersRequest $request, Users $users)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -79,7 +112,7 @@ class UsersController extends Controller
      * @param  \App\Models\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Users $users)
+    public function destroy(User $users)
     {
         //
     }

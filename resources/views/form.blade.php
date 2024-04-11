@@ -52,7 +52,7 @@
                 </div>
                 <input type="hidden" name="image" id="captured-image">
                 <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-success btn-lg" ">
+                    <input type="submit" value="Submit" class="btn btn-success btn-lg">
                 </div>
             </form>
  @endif

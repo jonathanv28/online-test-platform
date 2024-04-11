@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\RegisterController;
 
@@ -26,7 +28,10 @@ Route::get('/val', function () {
 
 Route::get('/validate', [PhotosController::class, 'showForm']);
 Route::post('/validate', [PhotosController::class, 'submitForm']);
-Route::get('/login', [LoginController::class, 'index']);
-Route::get('/register', [RegisterController::class, 'index']);
-Route::post('/register', [RegisterController::class, 'store']);
-Route::get('/', [IndexController::class, 'visitHome']);
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logout']);
+Route::get('/register', [UsersController::class, 'create']);
+Route::post('/register', [UsersController::class, 'store']);
+// Route::resource('/register', RegisterController::class);
+Route::get('/', [IndexController::class, 'visitHome'])->middleware('auth');
