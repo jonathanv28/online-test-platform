@@ -18,6 +18,17 @@ class ResultsSeeder extends Seeder
         Result::create([
             'user_id' => '1',
             'test_id' => '1',
+            'score' => 89,
+        ]);
+
+        Result::create([
+            'user_id' => '1',
+            'test_id' => '2',
+        ]);
+
+        Result::create([
+            'user_id' => '1',
+            'test_id' => '3',
         ]);
     }
 }

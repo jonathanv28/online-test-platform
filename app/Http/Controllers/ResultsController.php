@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Test;
 use App\Models\Result;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreResultsRequest;
 use App\Http\Requests\UpdateResultsRequest;
 
@@ -31,12 +33,28 @@ class ResultsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreResultsRequest  $request
+     * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreResultsRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code' => 'required|exists:tests,code'
+        ]);
+
+        $test = Test::where('code', $request->code)->first();
+
+        if ($test) {
+            $user = auth()->user();
+            Result::create([
+                'user_id' => $user->id,
+                'test_id' => $test->id,
+                'score' => null,
+            ]);
+            return redirect()->back()->with('success', 'Test added successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Test with the provided code does not exist!');
+        }
     }
 
     /**

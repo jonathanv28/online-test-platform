@@ -55,21 +55,21 @@ class UsersController extends Controller
 
         if ($request->file('idcard')) {
             $idcard = $request->file('idcard');
-            $idcardName =  Hash::make($request->email) . '-idcard.jpg';
+            $idcardName =  uniqid() . '.jpg';
             $idcard->storeAs('public/users', $idcardName);
             $validatedData['idcard'] = $idcard->storeAs('users', $idcardName);
         }
 
         if ($request->file('photo')) {
             $photo = $request->file('photo');
-            $photoName =  Hash::make($request->name) . '-photo.jpg';
+            $photoName =  uniqid() . '.jpg';
             $photo->storeAs('public/users', $photoName);
             $validatedData['photo'] = $photo->storeAs('users', $photoName);
         }
 
         User::create($validatedData);
 
-        return redirect('/login')->with('success', 'Akun berhasil dibuat!');
+        return redirect('/login')->with('success', 'Account successfully made');
     }
 
     /**
