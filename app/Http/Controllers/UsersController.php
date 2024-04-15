@@ -42,7 +42,7 @@ class UsersController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|email:dns|unique:App\Models\Users,email',
+            'email' => 'required|email:dns|unique:App\Models\User,email',
             'password' => 'required|max:255|confirmed|min:8',
             'idcard' => 'image|required|max:2048',
             'photo' => 'image|required|max:2048',
