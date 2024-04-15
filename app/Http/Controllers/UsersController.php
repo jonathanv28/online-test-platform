@@ -80,7 +80,10 @@ class UsersController extends Controller
      */
     public function show(User $users)
     {
-        //
+        return view('profile', [
+            'title' => 'Profile | Online Test Platform',
+            'active' => 'Profile'
+        ]);
     }
 
     /**

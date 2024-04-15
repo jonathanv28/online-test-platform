@@ -66,7 +66,7 @@
                     @csrf
                     <div>
                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test code</label>
-                        <input type="text" name="code" id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Input Test Code" required />
+                        <input type="text" name="code" id="code" autofocus class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Input Test Code" required />
                     </div>
                     <div class="flex justify-between">
                         <button type="submit" class="mb-6 w-full text-white bg-grass hover:bg-grassbold focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>

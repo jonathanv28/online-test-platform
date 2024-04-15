@@ -37,3 +37,4 @@ Route::post('/register', [UsersController::class, 'store']);
 // Route::resource('/register', RegisterController::class);
 Route::get('/', [IndexController::class, 'visitHome'])->middleware('auth');
 Route::post('/tests', [ResultsController::class, 'store'])->name('tests.store')->middleware('auth');
+Route::get('/profile', [UsersController::class, 'show'])->middleware('auth');
