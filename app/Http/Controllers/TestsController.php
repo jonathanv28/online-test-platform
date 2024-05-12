@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Test;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTestsRequest;
 use App\Http\Requests\UpdateTestsRequest;
-use App\Models\Test;
 
 class TestsController extends Controller
 {
@@ -17,6 +18,36 @@ class TestsController extends Controller
     {
         //
     }
+
+    // TestController.php
+
+    public function validateFace(Test $test)
+    {
+        // Check if the test exists
+        if (!$test) {
+            abort(404, 'The test does not exist.');
+        }
+
+        // Check if the user is enrolled in this test
+        $user = Auth::user();
+        if (!$user->results->contains('test_id', $test->id)) {
+            abort(403, 'You are not enrolled in this test.');
+        }
+
+        // Optionally check if the user has already passed face validation for this test session
+        $sessionKey = 'validated_for_test_' . $test->id;
+        if (session()->has($sessionKey)) {
+            // Optionally redirect to the test page directly if already validated
+            return redirect()->route('tests.show', ['test' => $test->id]);
+        }
+
+        // Show the face validation view
+        return view('test.validate', [
+            'test' => $test,
+            'title' => 'Validate | Online Test Platform',
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

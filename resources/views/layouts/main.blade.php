@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }}</title>
 
     {{-- Tailwind CSS --}}
@@ -32,23 +33,18 @@
 
     @yield('content')
 
-    {{-- Flowbite Js --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
-
-    {{-- AOS Js --}}
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js" defer></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js" defer></script>
     <script>
-        AOS.init();
-    </script>
-
-    {{-- Fancybox Js --}}
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-    <script>
-        // Initialise Carousel
-        const cardSlider = new Carousel(document.querySelector("#cardSlider"), {
-            Dots: false,
+        document.addEventListener("DOMContentLoaded", function () {
+            AOS.init();
+            const cardSlider = new Carousel(document.querySelector("#cardSlider"), {
+                Dots: false,
+            });
         });
     </script>
+    
     {{-- @include('partials.footer') --}}
 </body>
 

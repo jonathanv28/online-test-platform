@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('test_id');
             $table->integer('score')->nullable();
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
             $table->timestamps();
         });
     }

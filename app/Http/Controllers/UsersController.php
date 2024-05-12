@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Storage;
 
 
 class UsersController extends Controller
@@ -38,39 +41,43 @@ class UsersController extends Controller
      * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email:dns|unique:App\Models\User,email',
-            'password' => 'required|max:255|confirmed|min:8',
-            'idcard' => 'image|required|max:2048',
-            'photo' => 'image|required|max:2048',
-            'institute' => 'required|max:255',
-            'phone' => 'required|max:255',
-        ]);
-
-        $password =  Hash::make($request->password);
-        $validatedData['password'] = $password;
-
-        if ($request->file('idcard')) {
-            $idcard = $request->file('idcard');
-            $idcardName =  uniqid() . '.jpg';
-            $idcard->storeAs('public/users', $idcardName);
-            $validatedData['idcard'] = $idcard->storeAs('users', $idcardName);
+        $validatedData = $request->validated();
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        
+        $idcardUrl = $this->storeFile($request, 'idcard');
+        $photoUrl = $this->storeFile($request, 'photo');
+    
+        if (!$idcardUrl || !$photoUrl) {
+            return back()->withErrors('File upload failed. Please try again.')->withInput();
         }
-
-        if ($request->file('photo')) {
-            $photo = $request->file('photo');
-            $photoName =  uniqid() . '.jpg';
-            $photo->storeAs('public/users', $photoName);
-            $validatedData['photo'] = $photo->storeAs('users', $photoName);
-        }
-
+    
+        $validatedData['idcard'] = $idcardUrl;
+        $validatedData['photo'] = $photoUrl;
+    
         User::create($validatedData);
-
-        return redirect('/login')->with('success', 'Account successfully made');
+        return redirect('/login')->with('success', 'Account successfully created');
     }
+    
+    
+    private function storeFile($request, $field) {
+        if ($request->file($field)) {
+            $file = $request->file($field);
+            $filePath = 'users'; // Customize the path as needed.
+            $fileName = uniqid() . '.jpg'; // Generate a unique file name.
+    
+            try {
+                $path = Storage::disk('s3')->putFileAs($filePath, $file, $fileName, 'public');
+                return Storage::disk('s3')->url($path);
+            } catch (\Exception $e) {
+                Log::error("Failed to upload $field: " . $e->getMessage());
+                return null; // Or handle the error as appropriate.
+            }
+        }
+        return null; // Return null if no file was uploaded.
+    }
+    
 
     /**
      * Display the specified resource.

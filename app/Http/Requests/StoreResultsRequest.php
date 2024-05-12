@@ -13,18 +13,32 @@ class StoreResultsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // You might want to add authorization logic here if needed
+        return true; // Assuming every authenticated user can add tests
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
         return [
-            //
+            'code' => 'required|exists:tests,code', // Ensures the code exists in the tests table
+        ];
+    }
+
+    /**
+     * Get custom messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'code.required' => 'A test code is required to add a test.',
+            'code.exists' => 'The provided test code does not exist. Please check and try again.',
         ];
     }
 }

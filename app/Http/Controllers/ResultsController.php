@@ -36,25 +36,17 @@ class ResultsController extends Controller
      * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreResultsRequest $request)
     {
-        $request->validate([
-            'code' => 'required|exists:tests,code'
+        $test = Test::where('code', $request->code)->firstOrFail();
+    
+        Result::create([
+            'user_id' => auth()->id(),
+            'test_id' => $test->id,
+            'score' => null, // This could be initialized or left to be updated later
         ]);
-
-        $test = Test::where('code', $request->code)->first();
-
-        if ($test) {
-            $user = auth()->user();
-            Result::create([
-                'user_id' => $user->id,
-                'test_id' => $test->id,
-                'score' => null,
-            ]);
-            return redirect()->back()->with('success', 'Test added successfully!');
-        } else {
-            return redirect()->back()->with('error', 'Test with the provided code does not exist!');
-        }
+    
+        return redirect()->back()->with('success', 'Test added successfully!');
     }
 
     /**
