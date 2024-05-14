@@ -57,6 +57,7 @@ class UsersController extends Controller
         $validatedData['photo'] = $photoUrl;
     
         User::create($validatedData);
+
         return redirect('/login')->with('success', 'Account successfully created');
     }
     

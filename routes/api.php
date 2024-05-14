@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/validate-face', [FaceValidationController::class, 'validateFace'])
-     ->middleware('auth'); // or just 'auth' if using session-based auth
+// Route::post('/validate-face', [FaceValidationController::class, 'validateFace'])
+//      ->middleware('auth'); // or just 'auth' if using session-based auth
 
+Route::middleware('auth:sanctum')->post('validate-face', [FaceValidationController::class, 'validateFace']);

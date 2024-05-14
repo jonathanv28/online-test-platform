@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Jonathan Victor Goklas',
             'email' => 'jonathanaibaho@gmail.com',
             'password' => Hash::make('jagdisbzkagd'),
-            'idcard' => 'users/$2y$10$4PvPe5w7qiiClEd02jSRwen6xWnb9ciiII8qyQ9vbrtu1iF3NoEhS-idcard.jpg',
-            'photo' => 'users/$2y$10$WTgkDbkOU8uUaFg2UbO1n.nPISZ9f.wga6CNuvs4uYYIhRCDQo.fK-photo.jpg',
+            'idcard' => 'https://online-test-bucket-fyp1.s3.ap-southeast-2.amazonaws.com/users/664115b616b29.jpg',
+            'photo' => 'https://online-test-bucket-fyp1.s3.ap-southeast-2.amazonaws.com/users/664115b70c4b1.jpg',
             'phone' => '085924152111',
             'institute' => 'Universitas Padjadjaran',
         ]);
