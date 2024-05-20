@@ -50,7 +50,8 @@ document.getElementById('capture').addEventListener('click', function() {
     document.getElementById('process').style.display = 'inline-block'; // Show the process button
 });
 
-// Process the captured image for validation
+// In your validate.js or embedded <script> tag
+
 document.getElementById('process').addEventListener('click', function() {
     var canvas = document.getElementById('canvas');
     var imageData = canvas.toDataURL('image/jpg');
@@ -60,6 +61,8 @@ document.getElementById('process').addEventListener('click', function() {
 
 function sendImageDataToServer(imageData) {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const testId = document.getElementById('testId').value;  // Get the test ID from the hidden input
+
     fetch('/api/validate-face', {
         method: 'POST',
         headers: {
@@ -72,7 +75,7 @@ function sendImageDataToServer(imageData) {
     .then(data => {
         if (data.success) {
             alert('Face validated successfully.');
-            window.location.href = '/start-test/{{ $test->id }}'; // Redirect to the test
+            window.location.href = '/tests/' + testId + '/1';  // Use the fetched test ID for redirection
         } else {
             alert('Face validation failed. Please try again.');
         }

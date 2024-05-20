@@ -16,6 +16,7 @@
         <button id="process" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 hidden">
             Validate Face
         </button>
+        <input type="hidden" id="testId" value="{{ $test->id }}">
     </div>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
 </div>

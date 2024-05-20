@@ -11,6 +11,7 @@ use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FaceValidationController;
+use App\Http\Controllers\TestController;
 
 
 /*
@@ -24,32 +25,12 @@ use App\Http\Controllers\FaceValidationController;
 |
 */
 
-Route::get('/val', function () {
-    return view('form', [
-        'title' => 'Home | Online Test Platform',
-        'active' => 'home',
-    ]);
-})->middleware('auth');
-
-Route::get('/test-s3', function () {
-    $filePath = 'testfile.txt';
-    $contents = 'Hello, world!';
-    Storage::disk('s3')->put($filePath, $contents);
-    return 'File was saved to S3';
-});
-
-
-// Route::get('/validate', [PhotosController::class, 'showForm'])->middleware('auth');
-// Route::post('/validate', [PhotosController::class, 'submitForm'])->middleware('auth');
-// Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-// Route::post('/login', [LoginController::class, 'authenticate']);
-// Route::post('/logout', [LoginController::class, 'logout']);
-// Route::get('/register', [UsersController::class, 'create']);
-// Route::post('/register', [UsersController::class, 'store']);
-// // Route::resource('/register', RegisterController::class);
-// Route::get('/', [IndexController::class, 'visitHome'])->middleware('auth');
-// Route::post('/tests', [ResultsController::class, 'store'])->name('tests.store')->middleware('auth');
-// Route::get('/profile', [UsersController::class, 'show'])->middleware('auth');
+// Route::get('/val', function () {
+//     return view('form', [
+//         'title' => 'Home | Online Test Platform',
+//         'active' => 'home',
+//     ]);
+// })->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [IndexController::class, 'visitHome']);
@@ -59,10 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/tests', [ResultsController::class, 'store'])->name('tests.store');
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/tests/{test}/validate', [TestsController::class, 'validateFace'])->name('tests.validate');
-    // Route::post('/validate-face', [FaceValidationController::class, 'validateFace']);
     Route::get('/files/{filename}', 'FileController@getFile')->name('files.get');
-    // In routes/web.php
-    // Route::post('/validate-face', [FaceValidationController::class, 'validateFace'])->name('validate-face');
+    Route::get('/tests/{test}', [TestsController::class, 'show'])->name('tests.show');
+    Route::post('/submit-test', [TestsController::class, 'submit'])->name('tests.submit');
+    // Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
+    Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
+    // Route::get('/start-test/{test}', [TestsController::class, 'show'])->name('tests.show');
+    Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
 
 });
 

@@ -42,7 +42,7 @@ class TestsController extends Controller
         }
 
         // Show the face validation view
-        return view('test.validate', [
+        return view('tests.validate', [
             'test' => $test,
             'title' => 'Validate | Online Test Platform',
         ]);
@@ -76,10 +76,85 @@ class TestsController extends Controller
      * @param  \App\Models\Test  $tests
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $tests)
-    {
-        //
+    // Method to display the first question or a specific question
+// public function show(Test $test, $questionNumber = null)
+// {
+//     $questions = $test->questions()->with('answers')->get();
+//     if (!isset($questions[$questionNumber])) {
+//         abort(404, 'Question does not exist.');
+//     }
+
+//     return view('tests.question', [
+//         'test' => $test,
+//         'question' => $questions[$questionNumber],
+//         'questionNumber' => $questionNumber,
+//         'totalQuestions' => count($questions)
+//     ]);
+// }
+
+// public function show($testId)
+// {
+//     $test = Test::with(['questions.answers'])->find($testId);
+//     if (!$test) {
+//         abort(404);
+//     }
+//     return view('tests.show', [
+//         'test' => $test,
+//         'title' => $test->title . ' | Online Test Platform'  // Passing the title variable to the view
+//     ]);
+// }
+
+public function show(Test $test, $questionNumber = 1)
+{
+    $questions = $test->questions()->with('answers')->get();
+    if (!isset($questions[$questionNumber])) {
+        abort(404, 'Question does not exist.');
     }
+
+    return view('tests.show', [
+        'test' => $test,
+        'question' => $questions[$questionNumber],
+        'questionNumber' => $questionNumber,
+        'totalQuestions' => count($questions),
+        'title' => $test->title . ' | Online Test Platform'
+    ]);
+}
+
+
+
+// public function show(Test $test)
+// {
+//     $questions = $test->questions()->with('answers')->get();
+//     return view('tests.show', [
+//         'test' => $test,
+//         'questions' => $questions,
+//     ]);
+// }
+
+// Method to submit answers and calculate results
+public function submit(Request $request, Test $test)
+{
+    $answers = $request->input('answers', []);
+    $result = $this->calculateResults($answers, $test);
+
+    // Optionally save results to the database or session
+    session(['test_result' => $result]);
+
+    return redirect()->route('tests.result', ['test' => $test->id]);
+}
+
+protected function calculateResults($answers, Test $test)
+{
+    $score = 0;
+    foreach ($answers as $questionId => $answerId) {
+        $question = Question::findOrFail($questionId);
+        if ($question->correct_answer === $answerId) {
+            $score++;
+        }
+    }
+    return $score;
+}
+
 
     /**
      * Show the form for editing the specified resource.
