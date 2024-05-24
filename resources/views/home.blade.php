@@ -29,7 +29,7 @@
             <h1 class="font-bold text-4xl">Hi, {{ auth()->user()->name }} 👋</h1>
             <button href="#"
                 class="inline-flex items-center px-4 py-2 mx-7 text-sm font-medium text-center text-white bg-grass rounded-lg hover:bg-grassbold focus:ring-4 focus:outline-none focus:ring-green-200"
-                type="button" data-modal-target="addtest-modal" data-modal-toggle="addtest-modal">
+                type="button" data-modal-target="addtest-modal" data-modal-toggle="addtest-modal" id="addtest-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -45,7 +45,7 @@
     <!-- Dark overlay -->
     <div class="fixed inset-0 bg-black opacity-65"></div>
 
-    <div class="relative p-4 w-full max-w-md max-h-full">
+    <div data-aos="fade-up" class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -53,7 +53,7 @@
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                     Add Test
                 </h3>
-                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="addtest-modal">
+                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="addtest-modal" id="closetest-button">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -80,6 +80,7 @@
             <div class="grid grid-cols-5 gap-6">
                 @foreach ($enrolledTests as $enrolled)
                     <div
+                        data-aos="fade-up" data-aos-duration="650"
                         class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <img class="rounded-t-lg object-cover h-56" src="{{ asset('storage/' . $enrolled->tests->image) }}"
                             alt="" draggable="false" />
@@ -130,4 +131,24 @@
             <h2 class="mt-8 text-lg">No enrolled tests found. Start adding tests to start.</h2>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addTestButton = document.getElementById('addtest-button');
+            const closeModalButton = document.getElementById('closetest-button');
+            const modal = document.getElementById('addtest-modal');
+        
+            addTestButton.addEventListener('click', function() {
+                modal.classList.remove('hidden');
+                AOS.refresh();  // Reinitialize AOS to ensure animation plays
+            });
+        
+            closeModalButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
+            });
+            console.log('test_start_time');
+            localStorage.removeItem('test_start_time');
+            
+        });
+        </script>
 @endsection

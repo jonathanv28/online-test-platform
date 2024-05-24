@@ -3,23 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Test;
+use App\Models\Result;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTestsRequest;
 use App\Http\Requests\UpdateTestsRequest;
 
 class TestsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
     }
-
-    // TestController.php
 
     public function validateFace(Test $test)
     {
@@ -47,113 +43,88 @@ class TestsController extends Controller
             'title' => 'Validate | Online Test Platform',
         ]);
     }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show(Test $test)
     {
-        //
+        $user = Auth::user();
+
+        // Check if the user has already started the test
+        $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
+        if (!$result || !$result->start_time) {
+            // Redirect to face validation if test not started
+            return redirect()->route('tests.validate', ['test' => $test->id]);
+        }
+
+        $questions = $test->questions()->with('answers')->get();
+
+        return view('tests.show', [
+            'test' => $test,
+            'questions' => $questions,
+            'totalQuestions' => $questions->count(),
+            'title' => $test->title . ' | Online Test Platform'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTestsRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTestsRequest $request)
+    public function startTest(Test $test)
     {
-        //
+        $user = Auth::user();
+
+        // Start the test if not already started
+        $result = Result::firstOrCreate(
+            ['user_id' => $user->id, 'test_id' => $test->id],
+            ['start_time' => now()]
+        );
+
+        return redirect()->route('tests.show', ['test' => $test->id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Test  $tests
-     * @return \Illuminate\Http\Response
-     */
-    // Method to display the first question or a specific question
-// public function show(Test $test, $questionNumber = null)
-// {
-//     $questions = $test->questions()->with('answers')->get();
-//     if (!isset($questions[$questionNumber])) {
-//         abort(404, 'Question does not exist.');
-//     }
+    public function submit(Request $request, Test $test)
+    {
+        $user = Auth::user();
+        $answers = $request->input('answers', []);
+        $score = $this->calculateResults($answers, $test);
 
-//     return view('tests.question', [
-//         'test' => $test,
-//         'question' => $questions[$questionNumber],
-//         'questionNumber' => $questionNumber,
-//         'totalQuestions' => count($questions)
-//     ]);
-// }
+        // Update the result with the score and end time
+        Result::where('user_id', $user->id)->where('test_id', $test->id)
+            ->update(['score' => $score, 'end_time' => now()]);
 
-// public function show($testId)
-// {
-//     $test = Test::with(['questions.answers'])->find($testId);
-//     if (!$test) {
-//         abort(404);
-//     }
-//     return view('tests.show', [
-//         'test' => $test,
-//         'title' => $test->title . ' | Online Test Platform'  // Passing the title variable to the view
-//     ]);
-// }
+        return redirect()->route('tests.result', ['test' => $test->id]);
+    }
 
-public function show(Test $test, $questionNumber = 1)
+    protected function calculateResults($answers, Test $test)
+    {
+        $score = 0;
+        foreach ($answers as $questionId => $answerId) {
+            $question = $test->questions()->find($questionId);
+            if ($question && $question->correct_answer == $answerId) {
+                $score++;
+            }
+        }
+        return $score;
+    }
+
+    public function result($testId)
 {
-    $questions = $test->questions()->with('answers')->get();
-    if (!isset($questions[$questionNumber])) {
-        abort(404, 'Question does not exist.');
+    $user = Auth::user();
+    $result = Result::where('user_id', $user->id)->where('test_id', $testId)->first();
+
+    if (!$result) {
+        return redirect()->route('home')->with('error', 'No result found for this test.');
     }
 
-    return view('tests.show', [
-        'test' => $test,
-        'question' => $questions[$questionNumber],
-        'questionNumber' => $questionNumber,
-        'totalQuestions' => count($questions),
-        'title' => $test->title . ' | Online Test Platform'
+    return view('tests.result', [
+        'result' => $result,
+        'test' => $result->test,
+        'user' => $user,
     ]);
 }
 
 
-
-// public function show(Test $test)
-// {
-//     $questions = $test->questions()->with('answers')->get();
-//     return view('tests.show', [
-//         'test' => $test,
-//         'questions' => $questions,
-//     ]);
+// public function redirectToTestIfNeeded($user) {
+//     $ongoingTest = $user->results()->whereNull('end_time')->whereNotNull('start_time')->first();
+//     if ($ongoingTest) {
+//         return redirect()->route('tests.show', ['test' => $ongoingTest->test_id]);
+//     }
 // }
-
-// Method to submit answers and calculate results
-public function submit(Request $request, Test $test)
-{
-    $answers = $request->input('answers', []);
-    $result = $this->calculateResults($answers, $test);
-
-    // Optionally save results to the database or session
-    session(['test_result' => $result]);
-
-    return redirect()->route('tests.result', ['test' => $test->id]);
-}
-
-protected function calculateResults($answers, Test $test)
-{
-    $score = 0;
-    foreach ($answers as $questionId => $answerId) {
-        $question = Question::findOrFail($questionId);
-        if ($question->correct_answer === $answerId) {
-            $score++;
-        }
-    }
-    return $score;
-}
 
 
     /**

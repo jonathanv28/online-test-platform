@@ -30,5 +30,10 @@ class ResultsSeeder extends Seeder
             'user_id' => '1',
             'test_id' => '3',
         ]);
+
+        Result::create([
+            'user_id' => '2',
+            'test_id' => '1',
+        ]);
     }
 }

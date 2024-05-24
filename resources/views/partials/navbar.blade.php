@@ -35,12 +35,6 @@
                 </div>
                 <ul class="py-2" aria-labelledby="user-menu-button">
                     <li>
-                        <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-100">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-100">Add Test</a>
-                    </li>
-                    <li>
                         <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-100">My
                             Information</a>
                     </li>

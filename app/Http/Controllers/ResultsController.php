@@ -55,9 +55,16 @@ class ResultsController extends Controller
      * @param  \App\Models\Results  $results
      * @return \Illuminate\Http\Response
      */
-    public function show(Result $results)
+    public function show(Test $test)
     {
-        //
+        $user = Auth::user();
+        $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->firstOrFail();
+
+        return view('results.show', [
+            'test' => $test,
+            'result' => $result,
+            'title' => 'Results | Online Test Platform'
+        ]);
     }
 
     /**

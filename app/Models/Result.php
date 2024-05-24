@@ -12,6 +12,8 @@ class Result extends Model
     protected $fillable = [
         'user_id',
         'test_id',
+        'start_time',
+        'end_time',
     ];
 
     public function tests()

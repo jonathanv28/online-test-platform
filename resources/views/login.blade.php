@@ -57,7 +57,7 @@
             @csrf
             <h1 class="text-3xl font-bold text-center text-darkblue">Online Test Platform</h1>
               <h5 class="text-2xl font-bold text-center text-darkblue">Login</h5>
-              <div>
+              <div data-aos="fade-up" >
                   <label for="email" class="block mb-2 text-sm font-normal text-gray-900">Email</label>
                   <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -95,5 +95,11 @@
     
   {{-- Flowbite Js --}}
   <script src="https://unpkg.com/flowbite@1.6.0/dist/flowbite.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        AOS.init();
+    });
+</script>
 </body>
 </html>

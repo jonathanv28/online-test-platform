@@ -1,11 +1,12 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="test-container" data-duration="{{ $test->duration }}">
+<div class="test-container" data-duration="{{ $test->duration }}" id="test-container">
     <h1>{{ $test->title }}</h1>
     <div id="time">00:00</div>
-    @foreach ($test->questions as $question)
-        <div class="question" data-question-id="{{ $question->id }}" style="display: none;">
+    <div id="question-container">
+        @foreach ($test->questions as $index => $question)
+        <div class="question" data-question-id="{{ $question->id }}" style="{{ $index == 0 ? 'display: block;' : 'display: none;' }}">
             <p>{{ $question->question_text }}</p>
             @foreach ($question->answers as $answer)
                 <label>
@@ -14,19 +15,14 @@
                 </label><br>
             @endforeach
         </div>
-        @if ($questionNumber > 0)
-            <a href="{{ route('tests.show', ['test' => $test->id, 'questionNumber' => $questionNumber - 1]) }}" class="btn btn-primary">Previous</a>
-        @endif
-        @if ($questionNumber < $totalQuestions - 1)
-            <a href="{{ route('tests.show', ['test' => $test->id, 'questionNumber' => $questionNumber + 1]) }}" class="btn btn-primary">Next</a>
-        @endif
-    @endforeach
-    <@if ($questionNumber == $totalQuestions - 1)
-    <form method="post" action="{{ route('tests.submit', ['test' => $test->id]) }}">
+        @endforeach
+    </div>
+    <button id="previous" class="btn btn-primary" style="display: none;">Previous</button>
+    <button id="next" class="btn btn-primary">Next</button>
+    <form id="submit-test" method="post" action="{{ route('tests.submit', ['test' => $test->id]) }}" style="display: none;">
         @csrf
         <button type="submit" class="btn btn-success">Submit Test</button>
     </form>
-@endif
 </div>
 <script src="{{ asset('js/test.js') }}"></script>
 @endsection

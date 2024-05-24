@@ -40,14 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/tests', [ResultsController::class, 'store'])->name('tests.store');
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/tests/{test}/validate', [TestsController::class, 'validateFace'])->name('tests.validate');
-    Route::get('/files/{filename}', 'FileController@getFile')->name('files.get');
     Route::get('/tests/{test}', [TestsController::class, 'show'])->name('tests.show');
+    Route::post('/tests/{test}/start', [TestsController::class, 'startTest'])->name('tests.start');
     Route::post('/submit-test', [TestsController::class, 'submit'])->name('tests.submit');
-    // Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
-    Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
-    // Route::get('/start-test/{test}', [TestsController::class, 'show'])->name('tests.show');
     Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
-
+    Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
+    Route::get('/tests/{test}/result', [TestsController::class, 'result'])->name('tests.result');
 });
 
 Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);
