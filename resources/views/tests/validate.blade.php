@@ -21,7 +21,7 @@
         <canvas id="canvas" width="854" height="480" style="display:none; border-radius: 12px;"></canvas>
     </div>
     <div data-aos="fade-up" class="flex justify-center items-center gap-6">
-        <button id="capture-and-validate" class="px-4 w-1/3 py-2 text-md font-medium text-center text-white bg-grass rounded-lg focus:outline-none hover:bg-grassbold focus:ring-4 focus:ring-green-200">
+        <button id="capture-and-validate" class="px-4 w-1/3 py-2 text-md font-medium text-center text-white bg-blue-700 rounded-lg focus:outline-none hover:bg-blue-900 focus:ring-4 focus:ring-blue-200">
             Capture & Validate
         </button>
         <button id="start-test" class="px-4 w-1/5 py-2 text-md font-medium text-center text-gray-700 bg-gray-300 cursor-not-allowed rounded-lg focus:outline-none" disabled>

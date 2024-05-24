@@ -75,13 +75,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     alert('Face validated successfully.');
-                    startTestButton.classList.replace('bg-gray-300', 'bg-grass'); // Change Start Test button color to active
+                    startTestButton.classList.replace('bg-gray-300', 'bg-blue-700'); // Change Start Test button color to active
                     startTestButton.disabled = false; // Enable the Start Test button
                     startTestButton.classList.remove('cursor-not-allowed', 'text-gray-700');
-                    startTestButton.classList.add('cursor-pointer', 'hover:bg-grassbold', 'focus:ring-4', 'focus:ring-green-200', 'text-white'); // Enable and stylize the button
+                    startTestButton.classList.add('cursor-pointer', 'hover:bg-blue-900', 'focus:ring-4', 'focus:ring-green-200', 'text-white'); // Enable and stylize the button
 
                     button.innerHTML = 'Capture & Validate'; // Reset the button text
-                    button.classList.remove('text-white', 'bg-grass', 'focus:outline-none', 'hover:bg-grassbold', 'focus:ring-4', 'focus:ring-green-200'); // Enable and stylize the button
+                    button.classList.remove('text-white', 'bg-blue-700', 'focus:outline-none', 'hover:bg-blue-900', 'focus:ring-4', 'focus:ring-green-200'); // Enable and stylize the button
                     button.classList.add('cursor-not-allowed', 'text-gray-700', 'bg-gray-300'); // Enable and stylize the button
                     button.disabled = true; // Re-enable the button
                 } else {

@@ -12,5 +12,11 @@
         <p>Duration: {{ $result->start_time->diffInMinutes($result->end_time) }} minutes</p>
     </div>
     <a href="{{ route('home') }}" class="btn btn-primary">Go to Home</a>
+
+    @if(session('clear_timer'))
+    <script>
+        localStorage.removeItem('test_start_time');
+    </script>
+    @endif
 </div>
 @endsection

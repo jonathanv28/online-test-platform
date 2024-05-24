@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function startTimer(duration, startTime) {
-        const timerElement = document.getElementById('time');
+        const timerElement = document.getElementById('timer');
         const interval = setInterval(() => {
             const now = new Date();
             const elapsed = Math.floor((now - startTime) / 1000);
@@ -138,5 +138,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showQuestion(0);
     updateNavigationButtons();
+
+    document.getElementById('submit-test').addEventListener('click', function(event) {
+        event.preventDefault();
+        submitTest();
+    });
+
+    function submitTest() {
+        const answers = {};
+        document.querySelectorAll('.question').forEach(question => {
+            const questionId = question.dataset.questionId;
+            const selectedAnswer = question.querySelector('input[type="radio"]:checked');
+            if (selectedAnswer) {
+                answers[questionId] = selectedAnswer.value; // Capture the answer's value
+            }
+        });
+
+        console.log(answers);
+    
+        fetch('/tests/' + document.getElementById('testId').value + '/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({answers})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data.success) {
+                window.location.href = '/tests/' + data.testId + '/result'; // Redirect to results page
+            } else {
+                alert(data.message || 'Failed to submit test.');
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting test:', error);
+            alert('Failed to submit test. Please check the console for more details.');
+        });
+    }
+    
 });
 

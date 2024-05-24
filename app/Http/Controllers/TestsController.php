@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Test;
 use App\Models\Result;
-
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTestsRequest;
 use App\Http\Requests\UpdateTestsRequest;
+use Illuminate\Support\Facades\Log;
 
 class TestsController extends Controller
 {
@@ -54,6 +55,11 @@ class TestsController extends Controller
             return redirect()->route('tests.validate', ['test' => $test->id]);
         }
 
+        // Check if the test has been completed
+        if ($result->end_time || $result->score !== null) {
+            return redirect()->route('home')->with('info', 'You have already completed this test.');
+        }
+
         $questions = $test->questions()->with('answers')->get();
 
         return view('tests.show', [
@@ -79,15 +85,42 @@ class TestsController extends Controller
 
     public function submit(Request $request, Test $test)
     {
-        $user = Auth::user();
-        $answers = $request->input('answers', []);
-        $score = $this->calculateResults($answers, $test);
-
-        // Update the result with the score and end time
-        Result::where('user_id', $user->id)->where('test_id', $test->id)
-            ->update(['score' => $score, 'end_time' => now()]);
-
-        return redirect()->route('tests.result', ['test' => $test->id]);
+        try {
+            $user = Auth::user();
+            $answers = $request->input('answers', []);
+            Log::info('Submitted answers:', $answers);  // Log submitted answers
+        
+            // Initialize score
+            $score = 0;
+            foreach ($answers as $questionId => $answerId) {
+                $answer = Answer::where('question_id', $questionId)
+                                ->where('id', $answerId)
+                                ->first();
+        
+                // Check if the answer is correct
+                if ($answer && $answer->is_correct) {
+                    $score++;
+                }
+            }
+        
+            // Calculate percentage score
+            $totalQuestions = $test->questions()->count();
+            $scorePercentage = ($score / $totalQuestions) * 100;
+    
+            Log::info('Calculated score:', ['score' => $scorePercentage]);  // Log the calculated score
+        
+            // Update the result with the score and end time
+            Result::where('user_id', $user->id)->where('test_id', $test->id)
+                ->update(['score' => $scorePercentage, 'end_time' => now()]);
+    
+        
+            session()->forget('validated_for_test_' . $test->id);
+    
+            return response()->json(['success' => true, 'message' => 'Test submitted successfully.', 'testId' => $test->id]);
+            return redirect()->route('tests.result', ['test' => $test->id])->with('clear_timer', true);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while processing your request', 'error' => $e->getMessage()], 500);
+        }
     }
 
     protected function calculateResults($answers, Test $test)
@@ -102,10 +135,10 @@ class TestsController extends Controller
         return $score;
     }
 
-    public function result($testId)
+    public function result(Request $request, Test $test)
 {
     $user = Auth::user();
-    $result = Result::where('user_id', $user->id)->where('test_id', $testId)->first();
+    $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
 
     if (!$result) {
         return redirect()->route('home')->with('error', 'No result found for this test.');
@@ -118,13 +151,12 @@ class TestsController extends Controller
     ]);
 }
 
-
-// public function redirectToTestIfNeeded($user) {
-//     $ongoingTest = $user->results()->whereNull('end_time')->whereNotNull('start_time')->first();
-//     if ($ongoingTest) {
-//         return redirect()->route('tests.show', ['test' => $ongoingTest->test_id]);
-//     }
-// }
+    public function redirectToTestIfNeeded($user) {
+        $ongoingTest = $user->results()->whereNull('end_time')->whereNotNull('start_time')->first();
+        if ($ongoingTest) {
+            return redirect()->route('tests.show', ['test' => $ongoingTest->test_id]);
+        }
+    }
 
 
     /**

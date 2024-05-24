@@ -3,7 +3,7 @@
 @section('content')
 <div class="test-container" data-duration="{{ $test->duration }}" id="test-container">
     <h1>{{ $test->title }}</h1>
-    <div id="time">00:00</div>
+    <div id="timer">00:00</div>
     <div id="question-container">
         @foreach ($test->questions as $index => $question)
         <div class="question" data-question-id="{{ $question->id }}" style="{{ $index == 0 ? 'display: block;' : 'display: none;' }}">
@@ -19,10 +19,12 @@
     </div>
     <button id="previous" class="btn btn-primary" style="display: none;">Previous</button>
     <button id="next" class="btn btn-primary">Next</button>
-    <form id="submit-test" method="post" action="{{ route('tests.submit', ['test' => $test->id]) }}" style="display: none;">
+    {{-- <form id="submit-test" method="post" action="{{ route('tests.submit', ['test' => $test->id]) }}" style="display: none;">
         @csrf
         <button type="submit" class="btn btn-success">Submit Test</button>
-    </form>
+    </form> --}}
+    <input type="hidden" id="testId" value="{{ $test->id }}">
+    <button id="submit-test" type="button" class="btn btn-success">Submit Test</button>
 </div>
 <script src="{{ asset('js/test.js') }}"></script>
 @endsection

@@ -33,7 +33,7 @@ use App\Http\Controllers\TestController;
 // })->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [IndexController::class, 'visitHome']);
+    Route::get('/', [IndexController::class, 'visitHome'])->name('home');
     Route::get('/profile', [UsersController::class, 'show'])->name('profile.show');
     Route::get('/validate', [PhotosController::class, 'showForm'])->name('validation.show');
     Route::post('/validate', [PhotosController::class, 'submitForm'])->name('validation.submit');
@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tests/{test}/validate', [TestsController::class, 'validateFace'])->name('tests.validate');
     Route::get('/tests/{test}', [TestsController::class, 'show'])->name('tests.show');
     Route::post('/tests/{test}/start', [TestsController::class, 'startTest'])->name('tests.start');
-    Route::post('/submit-test', [TestsController::class, 'submit'])->name('tests.submit');
+    // Route::post('/submit-test', [TestsController::class, 'submit'])->name('tests.submit');
     Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
     Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
     Route::get('/tests/{test}/result', [TestsController::class, 'result'])->name('tests.result');
