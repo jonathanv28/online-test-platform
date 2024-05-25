@@ -1,21 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Admins;
-use App\Http\Requests\StoreAdminsRequest;
-use App\Http\Requests\UpdateAdminsRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
+use App\Models\Test;
+use App\Models\Question;
+use App\Models\Answer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class AdminsController extends Controller
+class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function show($id)
     {
-        //
+        $test = Test::findOrFail($id);
+        return view('admin.tests.show', [
+            'test' => $test,
+            'title' => "View Test | Online Test Platform"  // Add a custom title for the view
+        ]);
     }
 
     /**
@@ -31,10 +39,10 @@ class AdminsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreAdminsRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAdminsRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -42,10 +50,10 @@ class AdminsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Admins  $admins
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Admins $admins)
+    public function show($id)
     {
         //
     }
@@ -53,10 +61,10 @@ class AdminsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Admins  $admins
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admins $admins)
+    public function edit($id)
     {
         //
     }
@@ -64,11 +72,11 @@ class AdminsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateAdminsRequest  $request
-     * @param  \App\Models\Admins  $admins
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAdminsRequest $request, Admins $admins)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +84,10 @@ class AdminsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Admins  $admins
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admins $admins)
+    public function destroy($id)
     {
         //
     }

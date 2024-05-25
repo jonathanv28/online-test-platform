@@ -19,6 +19,8 @@
     {{-- AOS CSS --}}
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+
 </head>
 
 <body class="font-inter">
@@ -181,21 +183,25 @@
                     </div>
                     <div class="">
                         <button type="submit"
-                            class="w-full text-white bg-grass hover:bg-grassbold focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register</button>
+                            class="w-full text-white bg-blue-700 hover:bg-blue-900 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register</button>
                         <div class="mt-2">
                             <p class="text-xs text-center font-normal text-gray-400 mb-3">already have an account?</p>
-                            <a href="/login" class="w-full inline-block text-grass bg-white border transition duration-200 hover:border-grass focus:outline-none hover:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</a>
+                            <a href="/login" class="w-full inline-block text-blue-700 bg-white border transition duration-200 hover:border-blue-700 focus:outline-none hover:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</a>
                         </div>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 
 
     {{-- Flowbite Js --}}
-    <script src="https://unpkg.com/flowbite@1.6.0/dist/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            AOS.init();
+        });
+    </script>
 </body>
 
 </html>

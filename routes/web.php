@@ -11,7 +11,10 @@ use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FaceValidationController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\TestController as AdminTestController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 
 /*
@@ -55,4 +58,28 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->middleware('throttle:10,1');
     Route::get('/register', [UsersController::class, 'create']);
     Route::post('/register', [UsersController::class, 'store']);
+});
+
+// Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+//     Route::resource('tests', Admin\TestController::class);
+//     Route::resource('users', Admin\UserController::class);
+// });
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminLoginController::class, 'index'])->name('login');
+        Route::post('/login', [AdminLoginController::class, 'authenticate']);
+    });
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('tests', AdminTestController::class);
+        Route::resource('users', AdminUserController::class);
+    });
+});
+
+// Fall back route
+Route::fallback(function () {
+    return view('errors.404');
 });

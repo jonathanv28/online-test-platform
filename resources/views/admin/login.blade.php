@@ -10,7 +10,6 @@
     <link href="/css/app.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-
     {{-- Font Inter --}}
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -55,12 +54,12 @@
           </div>
           @endif
 
-          <form class="space-y-3.5" action="/login" method="POST">
+          <form class="space-y-3.5" action="{{ route('admin.login') }}" method="POST">
             @csrf
-            <h1 class="text-3xl font-bold text-center text-darkblue">Online Test Platform</h1>
+            <h1 class="text-3xl font-bold text-center text-darkblue">Admin - Online Test Platform</h1>
               <h5 class="text-2xl font-bold text-center text-darkblue">Login</h5>
               <div data-aos="fade-up" >
-                  <label for="email" class="block mb-2 text-sm font-normal text-gray-900">Email</label>
+                  <label for="username" class="block mb-2 text-sm font-normal text-gray-900">Username</label>
                   <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                         <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"  class="w-5 h-5 text-gray-500">
@@ -70,7 +69,7 @@
                             <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
                         </svg>
                     </div>
-                    <input type="text" name="email" id="email" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 mb-3" placeholder="Input Email" autofocus value="{{ old('email') }}" required>
+                    <input type="text" name="username" id="username" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 mb-3" placeholder="Input Username" autofocus value="{{ old('username') }}" required>
               </div>
               <div>
                   <label for="password" class="block mb-2 text-sm font-normal text-gray-900">Password</label>
