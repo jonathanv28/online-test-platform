@@ -7,9 +7,9 @@
         <p>Your score: {{ $result->score }}/{{ $test->questions->count() }}</p>
     </div>
     <div class="details">
-        <p>Test taken on: {{ $result->start_time->format('d M Y H:i') }}</p>
-        <p>Test completed on: {{ $result->end_time->format('d M Y H:i') }}</p>
-        <p>Duration: {{ $result->start_time->diffInMinutes($result->end_time) }} minutes</p>
+        <p>Test taken on: {{ $result->start_time}}</p>
+        <p>Test completed on: {{ $result->end_time}}</p>
+        <p>Duration: {{ $result->start_time }} minutes</p>
     </div>
     <a href="{{ route('home') }}" class="btn btn-primary">Go to Home</a>
 

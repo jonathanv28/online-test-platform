@@ -171,8 +171,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
+            console.log(data);
             if(data.success) {
-                window.location.href = '/tests/' + data.testId + '/result'; // Redirect to results page
+                window.location.href = '/tests/' + 'result/' + data.testId; // Redirect to results page
+                alert(data.success);
+                console.log(data.message);
             } else {
                 alert(data.message || 'Failed to submit test.');
             }

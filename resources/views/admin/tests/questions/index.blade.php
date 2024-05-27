@@ -7,7 +7,7 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                     Manage Questions and Answers for <span class="underline decoration-blue-500">{{ $test->title }}</span>
-                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage the tests of the Online Test Platform here.</p>
+                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage the questions and answers of the  of the Online Test Platform here.</p>
                 </caption>
                 </div>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($test->questions as $question)
+                    @foreach ($questions as $question)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-4">
                             {{ $loop->iteration }}
@@ -56,21 +56,19 @@
                         </td>
                         @endforeach
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Option {{ $question->correct_answer + 1 }}
+                            Option {{ $question->correct_answer}}
                         </th>
                         <td class="px-6 py-4 text-right">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            <a href="{{ route('admin.tests.questions.edit', ['test' => $test->id, 'question' => $question->id]) }}" class="transition duration-200 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
+                            <a href="#" class="transition duration-200 font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
                         </td>
                     </tr>
                     @endforeach
-                    
                 </tbody>
             </table>
         </div>
-        
     </div>
 </div>
 @endsection

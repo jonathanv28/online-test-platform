@@ -20,7 +20,8 @@ class TestController extends Controller
 
     public function create()
     {
-        return view('admin.tests.create');
+        $title = 'Create Test | Online Test Platform';
+        return view('admin.tests.create', compact('title'));
     }
 
     public function store(Request $request)
@@ -56,7 +57,8 @@ class TestController extends Controller
 
     public function edit(Test $test)
     {
-        return view('admin.tests.edit', compact('test'));
+        $title = 'Manage Tests | Online Test Platform';
+        return view('admin.tests.edit', compact('test', 'title'));
     }
 
     public function update(Request $request, Test $test)
@@ -64,16 +66,21 @@ class TestController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'code' => 'required|string|max:100',
-            'image' => 'image',
+            'image' => 'sometimes|image',
             'duration' => 'required|integer'
         ]);
 
+        // Handle the image upload if there's one
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('tests', 's3');
-            $test->image = Storage::disk('s3')->url($imagePath);
+            $test->image = Storage::disk('s3')->url($imagePath); // Set the new image URL to the test instance
         }
 
-        $test->update($request->only(['title', 'code', 'duration']));
+        // Update the rest of the test details
+        $test->title = $request->title;
+        $test->code = $request->code;
+        $test->duration = $request->duration;
+        $test->save(); // Persist the updated test to the database
 
         return redirect()->route('admin.tests.index')->with('success', 'Test updated successfully.');
     }

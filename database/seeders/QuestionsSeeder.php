@@ -18,37 +18,37 @@ class QuestionsSeeder extends Seeder
         Question::create([
             'test_id' => '1',
             'question_text' => 'What is 2 + 3?',
-            'correct_answer' => '2'
-        ]);
-
-        Question::create([
-            'test_id' => '1',
-            'question_text' => 'What is 3 + 5?',
             'correct_answer' => '3'
         ]);
 
         Question::create([
             'test_id' => '1',
+            'question_text' => 'What is 3 + 5?',
+            'correct_answer' => '4'
+        ]);
+
+        Question::create([
+            'test_id' => '1',
             'question_text' => 'What is 5 + 2?',
-            'correct_answer' => '1'
+            'correct_answer' => '2'
         ]);
 
         Question::create([
             'test_id' => '2',
             'question_text' => 'What is 2 + 3?',
-            'correct_answer' => '2'
-        ]);
-
-        Question::create([
-            'test_id' => '2',
-            'question_text' => 'What is 3 + 5?',
             'correct_answer' => '3'
         ]);
 
         Question::create([
             'test_id' => '2',
+            'question_text' => 'What is 3 + 5?',
+            'correct_answer' => '4'
+        ]);
+
+        Question::create([
+            'test_id' => '2',
             'question_text' => 'What is 5 + 2?',
-            'correct_answer' => '1'
+            'correct_answer' => '2'
         ]);
     }
 }

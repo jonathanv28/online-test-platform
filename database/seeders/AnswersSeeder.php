@@ -17,73 +17,73 @@ class AnswersSeeder extends Seeder
     {
         Answer::create([
             'question_id' => '1',
-            'option_text' => 'A. 3',
+            'option_text' => '3',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '1',
-            'option_text' => 'B. 4',
+            'option_text' => '4',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '1',
-            'option_text' => 'C. 5',
+            'option_text' => '5',
             'is_correct' => '1'
         ]);
 
         Answer::create([
             'question_id' => '1',
-            'option_text' => 'D. 6',
+            'option_text' => '6',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '2',
-            'option_text' => 'A. 5',
+            'option_text' => '5',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '2',
-            'option_text' => 'B. 6',
+            'option_text' => '6',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '2',
-            'option_text' => 'C. 7',
+            'option_text' => '7',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '2',
-            'option_text' => 'D. 8',
+            'option_text' => '8',
             'is_correct' => '1'
         ]);
 
         Answer::create([
             'question_id' => '3',
-            'option_text' => 'A. 6',
+            'option_text' => '6',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '3',
-            'option_text' => 'B. 7',
+            'option_text' => '7',
             'is_correct' => '1'
         ]);
 
         Answer::create([
             'question_id' => '3',
-            'option_text' => 'C. 8',
+            'option_text' => '8',
             'is_correct' => '0'
         ]);
 
         Answer::create([
             'question_id' => '3',
-            'option_text' => 'D. 9',
+            'option_text' => '9',
             'is_correct' => '0'
         ]);
     }

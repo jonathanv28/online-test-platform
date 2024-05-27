@@ -112,12 +112,11 @@ class TestsController extends Controller
             // Update the result with the score and end time
             Result::where('user_id', $user->id)->where('test_id', $test->id)
                 ->update(['score' => $scorePercentage, 'end_time' => now()]);
-    
-        
-            session()->forget('validated_for_test_' . $test->id);
-    
+                
             return response()->json(['success' => true, 'message' => 'Test submitted successfully.', 'testId' => $test->id]);
-            return redirect()->route('tests.result', ['test' => $test->id])->with('clear_timer', true);
+            // return redirect()->route('tests.result', ['test' => $test->id])->with('clear_timer', true);
+
+            session()->forget('validated_for_test_' . $test->id);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while processing your request', 'error' => $e->getMessage()], 500);
         }
@@ -135,21 +134,22 @@ class TestsController extends Controller
         return $score;
     }
 
-    public function result(Request $request, Test $test)
-{
-    $user = Auth::user();
-    $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
+    public function result(Request $request, Test $test) {
+        $user = Auth::user();
+        $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
 
-    if (!$result) {
-        return redirect()->route('home')->with('error', 'No result found for this test.');
+        if (!$result) {
+            return redirect()->route('home')->with('error', 'No result found for this test.');
+        }
+
+        return view('tests.result', [
+            'result' => $result,
+            'test' => $result->tests,
+            'user' => $user,
+            'title' => $test->title . ' | Online Test Platform'
+
+        ]);
     }
-
-    return view('tests.result', [
-        'result' => $result,
-        'test' => $result->test,
-        'user' => $user,
-    ]);
-}
 
     public function redirectToTestIfNeeded($user) {
         $ongoingTest = $user->results()->whereNull('end_time')->whereNotNull('start_time')->first();

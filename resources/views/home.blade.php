@@ -164,11 +164,11 @@
                                     {{ $enrolled->tests->title }}</h5>
                                 <div class="mb-4 lg:flex-col">
                                     <div class="">
-                                        @if ($enrolled->score)
+                                        @if ($enrolled->score || $enrolled->score === 0)
                                             <span
                                                 class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Test
                                                 has been taken</span>
-                                        @else
+                                        @else 
                                             <span
                                                 class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Test
                                                 has not been taken</span>
@@ -180,7 +180,7 @@
                                             {{ $enrolled->tests->duration }} minutes</span>
                                     </div>
                                 </div>
-                                @if ($enrolled->score)
+                                @if ($enrolled->score || $enrolled->score === 0)
                                     <button href="#"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-200"
                                         disabled>

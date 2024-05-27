@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\TestController as AdminTestController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
 
 
 /*
@@ -28,18 +29,9 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 |
 */
 
-// Route::get('/val', function () {
-//     return view('form', [
-//         'title' => 'Home | Online Test Platform',
-//         'active' => 'home',
-//     ]);
-// })->middleware('auth');
-
 Route::middleware('auth')->group(function () {
     Route::get('/', [IndexController::class, 'visitHome'])->name('home');
     Route::get('/profile', [UsersController::class, 'show'])->name('profile.show');
-    Route::get('/validate', [PhotosController::class, 'showForm'])->name('validation.show');
-    Route::post('/validate', [PhotosController::class, 'submitForm'])->name('validation.submit');
     Route::post('/tests', [ResultsController::class, 'store'])->name('tests.store');
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/tests/{test}/validate', [TestsController::class, 'validateFace'])->name('tests.validate');
@@ -48,7 +40,7 @@ Route::middleware('auth')->group(function () {
     // Route::post('/submit-test', [TestsController::class, 'submit'])->name('tests.submit');
     Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
     Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
-    Route::get('/tests/{test}/result', [TestsController::class, 'result'])->name('tests.result');
+    Route::get('/test-result/{test}', [TestsController::class, 'result'])->name('tests.result');
 });
 
 Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);
@@ -59,12 +51,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [UsersController::class, 'create']);
     Route::post('/register', [UsersController::class, 'store']);
 });
-
-// Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-//     Route::resource('tests', Admin\TestController::class);
-//     Route::resource('users', Admin\UserController::class);
-// });
-
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminLoginController::class, 'index'])->name('login');
@@ -75,11 +61,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('tests', AdminTestController::class);
+        // Route::resource('questions', AdminQuestionController::class);
+        Route::resource('tests.questions', AdminQuestionController::class);
         Route::resource('users', AdminUserController::class);
     });
 });
 
-// Fall back route
-Route::fallback(function () {
-    return view('errors.404');
-});
+// // Fall back route
+// Route::fallback(function () {
+//     return view('errors.404');
+// });
