@@ -52,17 +52,21 @@ class FaceValidationController extends Controller
 
             $isMatch = $this->compareFaces($sourceImage, $targetImage);
 
-            if (isset($isMatch['FaceMatches']) && $isMatch['FaceMatches'][0]['Similarity'] >= 98) {
-                // Find the existing result and update start_time
-                $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
-                if ($result) {
-                    $result->update(['start_time' => now()]);
-                } else {
-                    Log::error('Result not found for user and test.');
-                    return response()->json(['error' => 'Result not found for user and test.'], 404);
-                }
+            $faceDetails = $this->detectFaces($sourceImage);
 
-                return response()->json(['success' => true, 'testId' => $test->id]);
+            if (isset($isMatch['FaceMatches']) && $isMatch['FaceMatches'][0]['Similarity'] >= 98) {
+                if ($this->isLive($faceDetails)) {
+                    $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
+                    if ($result) {
+                        $result->update(['start_time' => now()]);
+                    } else {
+                        Log::error('Result not found for user and test.');
+                        return response()->json(['error' => 'Result not found for user and test.'], 404);
+                    }
+                    return response()->json(['success' => true, 'testId' => $test->id]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Liveness check failed']);
+                }
             } else {
                 return response()->json(['success' => false, 'message' => 'Faces do not match']);
             }
@@ -89,5 +93,35 @@ class FaceValidationController extends Controller
         ]);
 
         return $result;
+    }
+    
+    protected function detectFaces($image)
+    {
+        $credentials = new Credentials(env('AWS_ACCESS_KEY_ID'), env('AWS_SECRET_ACCESS_KEY'));
+
+        $rekognition = new RekognitionClient([
+            'version' => 'latest',
+            'region' => 'ap-southeast-2',
+            'credentials' => $credentials
+        ]);
+
+        $result = $rekognition->detectFaces([
+            'Image' => ['Bytes' => $image],
+            'Attributes' => ['ALL'] // Get all face attributes
+        ]);
+
+        return $result;
+    }
+
+    protected function isLive($faceDetails)
+    {
+        // Check for attributes that indicate liveness such as 'EyesOpen', 'MouthOpen', etc.
+        if (isset($faceDetails['FaceDetails'][0])) {
+            $face = $faceDetails['FaceDetails'][0];
+
+            return $face['EyesOpen']['Value'] && $face['MouthOpen']['Value'] && !$face['Sunglasses']['Value'];
+        }
+
+        return false;
     }
 }

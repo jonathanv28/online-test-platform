@@ -19,11 +19,12 @@
     </div>
     <button id="previous" class="btn btn-primary" style="display: none;">Previous</button>
     <button id="next" class="btn btn-primary">Next</button>
-    {{-- <form id="submit-test" method="post" action="{{ route('tests.submit', ['test' => $test->id]) }}" style="display: none;">
-        @csrf
-        <button type="submit" class="btn btn-success">Submit Test</button>
-    </form> --}}
-    <input type="hidden" id="testId" value="{{ $test->id }}">
+    <input type="hidden" id="testId" value="{{ $test->id }}" name="test_id">
+    <!-- Video Stream -->
+    <div class="flex justify-center items-center" style="max-width: 854px;">
+        <video id="video" width="854" height="480" style="border-radius: 12px;" autoplay></video>
+        <canvas id="canvas" width="854" height="480" style="display: none;"></canvas>
+    </div>
     <button id="submit-test" type="button" class="btn btn-success">Submit Test</button>
 </div>
 <script src="{{ asset('js/test.js') }}"></script>

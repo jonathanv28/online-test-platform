@@ -1,83 +1,3 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//     const testDuration = parseInt(document.querySelector('.test-container').dataset.duration, 10) * 60;
-//     const questions = document.querySelectorAll('.question');
-//     const totalQuestions = questions.length;
-//     let currentQuestion = 0;
-
-//     const storedStartTime = localStorage.getItem('start_time');
-//     const startTime = storedStartTime ? new Date(storedStartTime) : new Date();
-//     if (!storedStartTime) localStorage.setItem('start_time', startTime);
-
-//     showQuestion(currentQuestion);
-//     startTimer(testDuration, startTime);
-
-//     document.getElementById('next').addEventListener('click', function() {
-//         if (currentQuestion < totalQuestions - 1) {
-//             currentQuestion++;
-//             showQuestion(currentQuestion);
-//         }
-//     });
-
-//     document.getElementById('previous').addEventListener('click', function() {
-//         if (currentQuestion > 0) {
-//             currentQuestion--;
-//             showQuestion(currentQuestion);
-//         }
-//     });
-
-//     function showQuestion(index) {
-//         questions.forEach((el, i) => {
-//             el.style.display = (i === index) ? 'block' : 'none';
-//         });
-//         document.getElementById('previous').style.display = (index === 0) ? 'none' : 'inline-block';
-//         document.getElementById('next').style.display = (index === totalQuestions - 1) ? 'none' : 'inline-block';
-//         document.getElementById('submit-form').style.display = (index === totalQuestions - 1) ? 'block' : 'none';
-//     }
-
-//     function startTimer(duration, startTime) {
-//         const timerElement = document.getElementById('time');
-//         const interval = setInterval(() => {
-//             const now = new Date();
-//             const elapsed = Math.floor((now - startTime) / 1000);
-//             const remaining = duration - elapsed;
-//             if (remaining <= 0) {
-//                 clearInterval(interval);
-//                 submitTest();
-//             } else {
-//                 const minutes = Math.floor(remaining / 60);
-//                 const seconds = remaining % 60;
-//                 timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-//             }
-//         }, 1000);
-//     }
-
-//     function submitTest() {
-//         const answers = {};
-//         document.querySelectorAll('.question').forEach(question => {
-//             const questionId = question.dataset.questionId;
-//             const selected = question.querySelector('input[type="radio"]:checked');
-//             if (selected) {
-//                 answers[questionId] = selected.value;
-//             }
-//         });
-//         fetch('/submit-test', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//             },
-//             body: JSON.stringify({answers})
-//         }).then(response => response.json())
-//           .then(data => {
-//               alert('Test submitted successfully.');
-//               window.location.href = '/results/' + data.testId;
-//           }).catch(error => {
-//               console.error('Error submitting test:', error);
-//               alert('Failed to submit test.');
-//           });
-//     }
-// });
-
 document.addEventListener('DOMContentLoaded', function() {
     // localStorage.removeItem('test_start_time');
     const questions = document.querySelectorAll('.question');
@@ -185,6 +105,39 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Failed to submit test. Please check the console for more details.');
         });
     }
-    
+
+    // Video capturing and sending for cheating detection
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const interval = 2000; // Capture every 2 seconds
+
+    function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true, aspectRatio: 1.777 })
+            .then(stream => {
+                video.srcObject = stream;
+                setInterval(captureFrame, interval);
+            })
+            .catch(err => console.error("Error accessing the camera: " + err));
+    }
+
+    function captureFrame() {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL('image/jpg');
+        sendVideoFrameToServer(imageData);
+    }
+
+    function sendVideoFrameToServer(imageData) {
+        fetch('/api/monitor-frame', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ image: imageData })
+        }).catch(err => console.error("Error sending frame to server: " + err));
+    }
+
+    startCamera();
 });
 

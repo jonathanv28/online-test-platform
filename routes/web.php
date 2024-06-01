@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
+use App\Http\Controllers\FaceCheckingController;
 
 
 /*
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tests/{test}/{questionNumber?}', [TestsController::class, 'show'])->name('tests.show');
     Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
     Route::get('/test-result/{test}', [TestsController::class, 'result'])->name('tests.result');
+    Route::post('/api/monitor-frame', [FaceCheckingController::class, 'monitorFrame'])->name('monitor.frame');
 });
 
 Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);
