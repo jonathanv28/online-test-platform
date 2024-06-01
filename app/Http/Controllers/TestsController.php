@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTestsRequest;
 use App\Http\Requests\UpdateTestsRequest;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class TestsController extends Controller
 {
@@ -77,7 +78,7 @@ class TestsController extends Controller
         // Start the test if not already started
         $result = Result::firstOrCreate(
             ['user_id' => $user->id, 'test_id' => $test->id],
-            ['start_time' => now()]
+            ['start_time' => Carbon::now()]
         );
 
         return redirect()->route('tests.show', ['test' => $test->id]);
@@ -111,7 +112,7 @@ class TestsController extends Controller
         
             // Update the result with the score and end time
             Result::where('user_id', $user->id)->where('test_id', $test->id)
-                ->update(['score' => $scorePercentage, 'end_time' => now()]);
+                ->update(['score' => $scorePercentage, 'end_time' => Carbon::now()]);
                 
             return response()->json(['success' => true, 'message' => 'Test submitted successfully.', 'testId' => $test->id]);
             // return redirect()->route('tests.result', ['test' => $test->id])->with('clear_timer', true);

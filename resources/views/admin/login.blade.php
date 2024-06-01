@@ -83,10 +83,6 @@
               </div>
               <div class="">
                 <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-900 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-3">Login</button>
-                <p class="text-xs text-center font-normal text-gray-400 mb-3">haven't had an account?</p>
-              </div>
-              <div class="">
-                  <a href="/register" class="w-full inline-block text-blue-700 bg-white border transition duration-200 hover:border-blue-700 focus:outline-none hover:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register</a>
               </div>
           </form>
 

@@ -25,16 +25,13 @@
                                     <label for="answer_{{ $index }}"
                                         class="block mb-2 text-sm font-normal text-gray-900">Option
                                         {{ $index + 1 }}</label>
-                                    {{-- <input type="text" id="answer_{{ $index }}"
-                                        name="answers[{{ $answer->id }}][text]" value="{{ $answer->option_text }}"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-500 focus:ring-blue-500 shadow-sm"> --}}
                                     <input type="text" id="answer_{{ $index }}" name="answers[{{ $answer->id }}][text]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $answer->option_text }}" required>
 
                                     <div class="mt-2">
                                         <label class="inline-flex items-center">
                                             <input type="radio" name="correct_answer" value="{{ $answer->id }}"
                                                 class="text-blue-600 border-gray-300"
-                                                {{ $question->correct_answer == $answer->id ? 'checked' : '' }}>
+                                                {{ ($question->correct_answer == ($answer->id % 4 != 0 ? $answer->id % 4 : $answer->id % 4 + 4)) ? 'checked' : '' }}>
                                             <span class="ml-2 text-sm text-gray-600">Correct answer</span>
                                         </label>
                                     </div>

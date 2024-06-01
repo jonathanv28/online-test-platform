@@ -16,6 +16,13 @@ class Result extends Model
         'end_time',
     ];
 
+    protected $dates = ['start_time', 'end_time'];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     public function tests()
     {
         return $this->belongsTo(Test::class, 'test_id');

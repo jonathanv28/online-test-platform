@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log(data);
             if(data.success) {
-                window.location.href = '/tests/' + 'result/' + data.testId; // Redirect to results page
+                window.location.href = '/test-result/' + data.testId; // Redirect to results page
                 alert(data.success);
                 console.log(data.message);
             } else {

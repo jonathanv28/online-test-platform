@@ -39,7 +39,7 @@ class LoginController extends Controller
 
         // $token = $request->user()->createToken('API Token')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        // return response()->json(['token' => $token]);
         return back()->with('loginError', 'Login failed!');
     }
 

@@ -22,10 +22,10 @@ class QuestionController extends Controller
         return view('admin.tests.questions.index', compact('questions', 'title', 'test'));
     }
 
-    public function create()
+    public function create(Test $test)
     {
-        $tests = Test::all(); // Assuming questions are related to tests
-        return view('admin.questions.create', compact('tests'));
+        $title = 'Add Question | Online Test Platform';
+        return view('admin.tests.questions.create', compact('test', 'title'));
     }
 
     public function store(Request $request)
@@ -33,18 +33,45 @@ class QuestionController extends Controller
         $request->validate([
             'test_id' => 'required|exists:tests,id',
             'question_text' => 'required|string',
-            'correct_answer' => 'required'
+            'answers' => 'required|array',
+            'correct_answer' => 'required|integer|min:1|max:4' // Assuming there are always four answers
         ]);
-
+    
+        // Create the new question with a temporary null for correct_answer
         $question = new Question([
-            'test_id' => $request->test_id,
-            'question_text' => $request->question_text,
-            'correct_answer' => $request->correct_answer
+            'test_id' => $request->input('test_id'),
+            'question_text' => $request->input('question_text'),
+            'correct_answer' => 0  // Temporarily set to null
         ]);
+        $question->save(); // Save the question to generate an ID for answers
+    
+        // Create and save answers
+        $answers = $request->input('answers');
+        $correctAnswerIndex = $request->input('correct_answer') - 1;
+        $correctAnswerId = null;
+    
+        foreach ($answers as $index => $answerText) {
+            $answer = new Answer([
+                'question_id' => $question->id,
+                'option_text' => $answerText,
+                'is_correct' => ($index === $correctAnswerIndex)
+            ]);
+            $answer->save();
+            if ($index === $correctAnswerIndex) {
+                $correctAnswerId = ($answer->id % 4 != 0 ? $answer->id % 4 : $answer->id % 4 + 4);
+            }
+        }
+    
+        // Update the correct answer ID in the question
+        $question->correct_answer = $correctAnswerId;
         $question->save();
-
-        return redirect()->route('admin.questions.index')->with('success', 'Question added successfully.');
+    
+        return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])
+                         ->with('success', 'Question and answers added successfully.');
     }
+    
+    
+    
 
     public function show(Question $question)
     {
@@ -53,103 +80,53 @@ class QuestionController extends Controller
 
     public function edit(Test $test, Question $question)
     {
-        // $test = Test::all(); // For dropdown list
         $title = 'Manage Question | Online Test Platform';
         return view('admin.tests.questions.edit', compact('question', 'test', 'title'));
     }
 
-    // public function update(Request $request, Test $test, Question $question)
-    // {
-    //     $request->validate([
-    //         'question_text' => 'required|string',
-    //         'answers' => 'required|array',
-    //         'correct_answer' => 'required|exists:answers,id',
-    //     ]);
-    
-    //     $question->question_text = $request->question_text;
-    //     $question->correct_answer = $request->correct_answer;
-    //     $question->save();
-    
-    //     foreach ($request->answers as $id => $data) {
-    //         $answer = Answer::find($id);
-    //         $answer->option_text = $data['text'];
-    //         $answer->save();
-    //     }
-    
-    //     return redirect()->route('admin.tests.questions.index', $test->id)->with('success', 'Question updated successfully.');
-    // }
+    public function update(Request $request, Test $test, Question $question)
+    {
+        $request->validate([
+            'question_text' => 'required|string',
+            'answers' => 'required|array',
+            'correct_answer' => 'required|integer|exists:answers,id',
+        ]);
 
-//     public function update(Request $request, Test $test, Question $question)
-// {
-//     $request->validate([
-//         'question_text' => 'required|string',
-//         'answers' => 'required|array',
-//         'correct_answer' => 'required|exists:answers,id',
-//     ]);
+        // Start by updating the question text
+        $question->question_text = $request->question_text;
+        
+        // Initialize a variable to keep track of the correct answer
+        $correctAnswerId = null;
 
-//     // Update the question text
-//     $question->question_text = $request->question_text;
-//     $question->save();
-
-//     // Update answers and set correct answer
-//     foreach ($question->answers as $answer) {
-//         // Update each answer's text
-//         if (isset($request->answers[$answer->id])) {
-//             $answer->option_text = $request->answers[$answer->id]['text'];
-//             // Determine if this is the correct answer
-//             $answer->is_correct = ($request->correct_answer == $answer->id);
-//             $answer->save();
-//         }
-//     }
-
-//     return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])->with('success', 'Question and answers updated successfully.');
-// }
-
-public function update(Request $request, Test $test, Question $question)
-{
-    $request->validate([
-        'question_text' => 'required|string',
-        'answers' => 'required|array',
-        'correct_answer' => 'required|integer|exists:answers,id',
-    ]);
-
-    // Start by updating the question text
-    $question->question_text = $request->question_text;
-    
-    // Initialize a variable to keep track of the correct answer
-    $correctAnswerId = null;
-
-    // Update answers and determine correct answer
-    foreach ($question->answers as $answer) {
-        if (isset($request->answers[$answer->id])) {
-            $answer->option_text = $request->answers[$answer->id]['text'];
-            // Check if this is the correct answer
-            $answer->is_correct = ($request->correct_answer == $answer->id);
-            $answer->save();
-            
-            // If this is the correct answer, store its ID
-            if ($answer->is_correct) {
-                $correctAnswerId = $answer->id;
+        // Update answers and determine correct answer
+        foreach ($question->answers as $answer) {
+            if (isset($request->answers[$answer->id])) {
+                $answer->option_text = $request->answers[$answer->id]['text'];
+                // Check if this is the correct answer
+                $answer->is_correct = ($request->correct_answer == $answer->id);
+                $answer->save();
+                
+                // If this is the correct answer, store its ID
+                if ($answer->is_correct) {
+                    $correctAnswerId = $answer->id;
+                }
             }
         }
+
+        // Update the correct answer ID in the question model
+        if ($correctAnswerId !== null) {
+            $question->correct_answer = ($correctAnswerId % 4 != 0 ? $correctAnswerId % 4 : $correctAnswerId % 4 + 4);
+        }
+        $question->save();
+
+        return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])
+                         ->with('success', 'Question and answers updated successfully.');
+        }
+
+        public function destroy(Question $question)
+        {
+            $question->delete();
+            return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully.');
+        }
     }
-
-    // Update the correct answer ID in the question model
-    if ($correctAnswerId !== null) {
-        $question->correct_answer = $correctAnswerId;
-    }
-    $question->save();
-
-    return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])
-                     ->with('success', 'Question and answers updated successfully.');
-}
-
-    
-
-    public function destroy(Question $question)
-    {
-        $question->delete();
-        return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully.');
-    }
-}
 

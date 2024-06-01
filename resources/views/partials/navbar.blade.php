@@ -1,4 +1,4 @@
-<nav class="bg-white border-gray-300 dark:bg-gray-900 shadow-lg border-b-2">
+<nav class="border-gray-300 dark:bg-gray-900 shadow-lg border-b-2">
     <div class="flex items-center justify-between mx-auto p-4 h-14">
         <a class="flex items-center space-x-3 rtl:space-x-reverse">
             <div class="text-center">
