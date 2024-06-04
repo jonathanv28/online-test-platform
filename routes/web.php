@@ -45,13 +45,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/monitor-frame', [FaceCheckingController::class, 'monitorFrame'])->name('monitor.frame');
 });
 
-Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);
+// Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
-    Route::post('/login', [LoginController::class, 'authenticate'])->middleware('throttle:10,1');
-    Route::get('/register', [UsersController::class, 'create']);
-    Route::post('/register', [UsersController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'authenticate'])->middleware('throttle:10,1')->name('login.submit');
+    Route::get('/register', [UsersController::class, 'create'])->name('register');
+    Route::post('/register', [UsersController::class, 'store'])->name('register.submit');
 });
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -63,9 +63,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('tests', AdminTestController::class);
-        // Route::resource('questions', AdminQuestionController::class);
         Route::resource('tests.questions', AdminQuestionController::class);
         Route::resource('users', AdminUserController::class);
+        Route::get('userlogs', [AdminUserController::class, 'indexLogs'])->name('userlogs.index');
+        Route::get('userlogs/{user}', [AdminUserController::class, 'showLogs'])->name('userlogs.show');
+        Route::get('userlogs/{user}/{test}', [AdminUserController::class, 'showLogsFocus'])->name('userlogs.showfocus');
     });
 });
 

@@ -9,7 +9,12 @@ class CheckingLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'image', 'reason'];
+    protected $fillable = [
+        'user_id',
+        'test_id',
+        'image',
+        'reason'
+    ];
 
     public function users()
     {

@@ -57,11 +57,11 @@ class FaceValidationController extends Controller
             if (isset($isMatch['FaceMatches']) && $isMatch['FaceMatches'][0]['Similarity'] >= 98) {
                 if ($this->isLive($faceDetails)) {
                     $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
-                    if ($result) {
-                        $result->update(['start_time' => now()]);
-                    } else {
-                        Log::error('Result not found for user and test.');
-                        return response()->json(['error' => 'Result not found for user and test.'], 404);
+                    if (!$result) {
+                        Result::create([
+                            'user_id' => $user->id,
+                            'test_id' => $test->id,
+                        ]);
                     }
                     return response()->json(['success' => true, 'testId' => $test->id]);
                 } else {
@@ -94,7 +94,6 @@ class FaceValidationController extends Controller
 
         return $result;
     }
-    
     protected function detectFaces($image)
     {
         $credentials = new Credentials(env('AWS_ACCESS_KEY_ID'), env('AWS_SECRET_ACCESS_KEY'));
@@ -107,7 +106,7 @@ class FaceValidationController extends Controller
 
         $result = $rekognition->detectFaces([
             'Image' => ['Bytes' => $image],
-            'Attributes' => ['ALL'] // Get all face attributes
+            'Attributes' => ['ALL']
         ]);
 
         return $result;
@@ -115,7 +114,6 @@ class FaceValidationController extends Controller
 
     protected function isLive($faceDetails)
     {
-        // Check for attributes that indicate liveness such as 'EyesOpen', 'MouthOpen', etc.
         if (isset($faceDetails['FaceDetails'][0])) {
             $face = $faceDetails['FaceDetails'][0];
 

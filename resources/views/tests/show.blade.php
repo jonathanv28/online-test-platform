@@ -4,6 +4,11 @@
 <div class="test-container" data-duration="{{ $test->duration }}" id="test-container">
     <h1>{{ $test->title }}</h1>
     <div id="timer">00:00</div>
+    <div id="question-nav">
+        @foreach ($test->questions as $index => $question)
+            <button class="question-nav-btn" data-question-index="{{ $index }}">{{ $index + 1 }}</button>
+        @endforeach
+    </div>
     <div id="question-container">
         @foreach ($test->questions as $index => $question)
         <div class="question" data-question-id="{{ $question->id }}" style="{{ $index == 0 ? 'display: block;' : 'display: none;' }}">

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Aws\Rekognition\RekognitionClient;
 use App\Models\CheckingLog;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class FaceCheckingController extends Controller
@@ -29,18 +28,16 @@ class FaceCheckingController extends Controller
     {
         $user = Auth::user();
         $imageData = $request->input('image');
+        $testId = $request->input('test_id');
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
 
-        // Save the frame temporarily
-        $tempImagePath = storage_path('app/public/temp_image.jpg');
+        $tempImagePath = storage_path('app/public/temp_image_monitoring.jpg');
         file_put_contents($tempImagePath, $image);
 
-        // Load the user's registered photo from S3
         $userPhotoUrl = $user->photo;
         $userPhotoPath = ltrim(parse_url($userPhotoUrl, PHP_URL_PATH), '/');
         $userPhoto = Storage::disk('s3')->get($userPhotoPath);
 
-        // Detect faces in the frame
         $result = $this->rekognition->detectFaces([
             'Image' => [
                 'Bytes' => $image,
@@ -50,13 +47,11 @@ class FaceCheckingController extends Controller
 
         $faceDetails = $result['FaceDetails'];
 
-        // Check for cheating
         if (count($faceDetails) > 1) {
-            $this->logCheating($user->id, $tempImagePath, 'Multiple faces detected.');
+            $this->logCheating($user->id, $testId, $tempImagePath, 'Multiple faces detected.');
         } elseif (count($faceDetails) === 0) {
-            $this->logCheating($user->id, $tempImagePath, 'No face detected.');
+            $this->logCheating($user->id, $testId, $tempImagePath, 'No face detected.');
         } else {
-            // Compare the detected face with the registered photo
             $faceComparison = $this->rekognition->compareFaces([
                 'SourceImage' => [
                     'Bytes' => $userPhoto,
@@ -70,22 +65,22 @@ class FaceCheckingController extends Controller
             $faceMatches = $faceComparison['FaceMatches'];
 
             if (count($faceMatches) === 0) {
-                $this->logCheating($user->id, $tempImagePath, 'Face does not match registered photo.');
+                $this->logCheating($user->id, $testId, $tempImagePath, 'Face does not match the registered photo.');
             }
         }
 
+        unlink($tempImagePath);
         return response()->json(['success' => true]);
-    }
+}
 
-    private function logCheating($userId, $imagePath, $reason)
+    private function logCheating($userId, $testId, $imagePath, $reason)
     {
-        // Upload the image to S3
         $imageName = 'checking_logs/' . time() . '_' . $userId . '.jpg';
         Storage::disk('s3')->put($imageName, file_get_contents($imagePath), 'public');
 
-        // Log the cheating incident
         CheckingLog::create([
             'user_id' => $userId,
+            'test_id' => $testId,
             'image' => Storage::disk('s3')->url($imageName),
             'reason' => $reason,
         ]);

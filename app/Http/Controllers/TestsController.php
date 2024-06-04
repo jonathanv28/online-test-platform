@@ -51,6 +51,7 @@ class TestsController extends Controller
 
         // Check if the user has already started the test
         $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
+        $result->update(['start_time' => Carbon::now()]);
         if (!$result || !$result->start_time) {
             // Redirect to face validation if test not started
             return redirect()->route('tests.validate', ['test' => $test->id]);

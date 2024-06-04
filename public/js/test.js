@@ -7,19 +7,27 @@ document.addEventListener('DOMContentLoaded', function() {
         questions.forEach((question, idx) => {
             question.style.display = idx === index ? 'block' : 'none';
         });
+        currentQuestionIndex = index;
+        updateNavigationButtons();
+        updateQuestionNav();
     }
 
     function navigateQuestion(step) {
         currentQuestionIndex += step;
         currentQuestionIndex = Math.max(0, Math.min(currentQuestionIndex, questions.length - 1));
         showQuestion(currentQuestionIndex);
-        updateNavigationButtons();
     }
 
     function updateNavigationButtons() {
         document.getElementById('previous').style.display = currentQuestionIndex > 0 ? 'inline-block' : 'none';
         document.getElementById('next').style.display = currentQuestionIndex < questions.length - 1 ? 'inline-block' : 'none';
         document.getElementById('submit-test').style.display = currentQuestionIndex === questions.length - 1 ? 'block' : 'none';
+    }
+
+    function updateQuestionNav() {
+        document.querySelectorAll('.question-nav-btn').forEach((btn, idx) => {
+            btn.style.backgroundColor = idx === currentQuestionIndex ? 'lightblue' : '';
+        });
     }
 
     function startTimer(duration, startTime) {
@@ -39,18 +47,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 1000);
     }
-    
+
     const storedStartTime = localStorage.getItem('test_start_time');
     const startTime = storedStartTime ? new Date(storedStartTime) : new Date();
     if (!storedStartTime) localStorage.setItem('test_start_time', startTime.toISOString());
-    
+
     const testDuration = parseInt(document.querySelector('.test-container').dataset.duration, 10) * 60;
     startTimer(testDuration, startTime);
-    
+
     window.addEventListener('beforeunload', function (e) {
-    const confirmationMessage = 'Are you sure you want to leave? Your test progress will be lost.';
-    (e || window.event).returnValue = confirmationMessage;
-    return confirmationMessage;
+        const confirmationMessage = 'Are you sure you want to leave? Your test progress will be lost.';
+        (e || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
     });
 
     document.getElementById('next').addEventListener('click', () => navigateQuestion(1));
@@ -58,6 +66,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showQuestion(0);
     updateNavigationButtons();
+
+    document.querySelectorAll('.question-nav-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => showQuestion(index));
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach((input) => {
+        input.addEventListener('change', () => {
+            const questionIndex = Array.from(questions).indexOf(input.closest('.question'));
+            const navBtn = document.querySelector(`.question-nav-btn[data-question-index="${questionIndex}"]`);
+            if (navBtn) {
+                navBtn.classList.add('answered');
+            }
+        });
+    });
 
     document.getElementById('submit-test').addEventListener('click', function(event) {
         event.preventDefault();
@@ -75,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         console.log(answers);
-    
+
         fetch('/tests/' + document.getElementById('testId').value + '/submit', {
             method: 'POST',
             headers: {
@@ -110,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
-    const interval = 2000; // Capture every 2 seconds
+    const interval = 5000; // Capture every 5 seconds
 
     function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: true, aspectRatio: 1.777 })
@@ -128,16 +150,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function sendVideoFrameToServer(imageData) {
+        const testId = document.getElementById('testId').value;
         fetch('/api/monitor-frame', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({ image: imageData })
+            body: JSON.stringify({ 
+                image: imageData,
+                test_id: testId
+            })
         }).catch(err => console.error("Error sending frame to server: " + err));
     }
 
     startCamera();
 });
-
