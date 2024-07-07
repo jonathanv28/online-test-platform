@@ -13,6 +13,6 @@ class AdminMiddleware
         if (Auth::check()) {
             return $next($request);
         }
-        return redirect('/home')->with('error', 'Access denied. Admins only!');
+        return  redirect()->route('home')->with('error', 'Access denied!');
     } 
 }

@@ -41,7 +41,7 @@
                             <path
                                 d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                         </svg>
-                        Home
+                        Dashboard
                     </a>
                 </li>
                 <li>
@@ -81,8 +81,9 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    Manage Users
-                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage the users of the Online Test Platform here.</p>
+                    Manage User Logs of {{ $user->name}} on <span
+                    class="underline decoration-blue-500">{{ $test->title }}</span>
+                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage user logs of the Online Test Platform here.</p>
                 </caption>
                 </div>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -117,7 +118,7 @@
                             <img src="{{ $log->image }}" alt="Suspicious Activity" class="w-40">
                         </td>
                         <td class="px-6 py-4">
-                            <a href="{{ $log->image }}" target="_blank" class="transition duration-200 font-medium text-green-600 hover:underline border border-green-700 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-sm p-1 text-center inline-flex items-center me-2">
+                            <a href="{{ $log->image }}" target="_blank" class="transition duration-200 font-medium text-green-600 hover:underline hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-sm p-1 text-center inline-flex items-center me-2">
                                 <svg class="w-10 h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd" d="M13 10a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H14a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
                                     <path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12c0 .556-.227 1.06-.593 1.422A.999.999 0 0 1 20.5 20H4a2.002 2.002 0 0 1-2-2V6Zm6.892 12 3.833-5.356-3.99-4.322a1 1 0 0 0-1.549.097L4 12.879V6h16v9.95l-3.257-3.619a1 1 0 0 0-1.557.088L11.2 18H8.892Z" clip-rule="evenodd"/>
@@ -126,7 +127,7 @@
                             </a>
                         </td>
                         <td class="px-6 py-4">
-                            {{ $log->created_at }}
+                            {{ $log->created_at->format('d-m-Y H:i:s') }}
                         </td>
                     </tr>
                     @endforeach

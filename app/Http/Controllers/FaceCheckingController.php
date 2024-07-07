@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Aws\Rekognition\RekognitionClient;
 use App\Models\CheckingLog;
+use App\Models\Test;
 use Illuminate\Support\Facades\Auth;
 
 class FaceCheckingController extends Controller
@@ -85,4 +86,16 @@ class FaceCheckingController extends Controller
             'reason' => $reason,
         ]);
     }
+
+    public function getLatestLogs(Test $test)
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        $latestLog = CheckingLog::where('user_id', $userId)
+            ->where('test_id', $test->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+    
+        return response()->json(['reason' => $latestLog->reason, 'timestamp' => $latestLog->created_at]);
+    }    
 }

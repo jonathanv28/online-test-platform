@@ -41,7 +41,7 @@
                                 <path
                                     d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                             </svg>
-                            Home
+                            Dashboard
                         </a>
                     </li>
                     <li>
@@ -71,8 +71,9 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <caption
                         class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                        Manage Users
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage the users of the Online
+                        Manage User Logs of <span
+                        class="underline decoration-blue-500">{{ $user->name }}</span>
+                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage users logs of the Online
                             Test Platform here.</p>
                     </caption>
             </div>
@@ -109,13 +110,13 @@
                             {{ $result->tests->title }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $result->score }}
+                            {{ $result->score ?? 'Not Yet Taken' }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $result->start_time }}
+                            {{ $result->start_time ? $result->start_time->setTimezone('Asia/Bangkok')->format('d-m-Y H:i:s') . ' WIB' : 'Not Yet Taken' }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $result->end_time }}
+                            {{ $result->end_time ? $result->end_time->setTimezone('Asia/Bangkok')->format('d-m-Y H:i:s') . ' WIB' : 'Not Yet Taken' }}
                         </td>
                         <td class="px-6 py-2">
                             <a href="{{ route('admin.userlogs.showfocus', ['test' => $result->tests->id, 'user' => $result->users->id]) }}" class="transition duration-200 font-medium text-green-600 hover:underline border border-green-700 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-sm p-1 text-center inline-flex items-center me-2">

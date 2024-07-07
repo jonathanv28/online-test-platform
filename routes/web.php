@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('tests.submit');
     Route::get('/test-result/{test}', [TestsController::class, 'result'])->name('tests.result');
     Route::post('/api/monitor-frame', [FaceCheckingController::class, 'monitorFrame'])->name('monitor.frame');
+    Route::get('/api/check-logs/{test}', [FaceCheckingController::class, 'getLatestLogs'])->name('check.logs');
+    Route::get('/test-start-time/{test}', [TestsController::class, 'getStartTime']);
 });
 
 // Route::middleware('auth:sanctum')->post('/create-token', [LoginController::class, 'createToken']);

@@ -65,10 +65,10 @@ class FaceValidationController extends Controller
                     }
                     return response()->json(['success' => true, 'testId' => $test->id]);
                 } else {
-                    return response()->json(['success' => false, 'message' => 'Liveness check failed']);
+                    return response()->json(['success' => false, 'validationError' => 'Face Validation failed. Please try again, possibly in a low-light background and try to open your mouth or smile with your teeth.']);
                 }
             } else {
-                return response()->json(['success' => false, 'message' => 'Faces do not match']);
+                return response()->json(['success' => false, 'validationError' => 'Face Validation failed. Faces do not match. Please try again, possibly in a low-light background.']);
             }
         } catch (\Exception $e) {
             Log::error("Error in face validation: " . $e->getMessage());
@@ -94,6 +94,7 @@ class FaceValidationController extends Controller
 
         return $result;
     }
+    
     protected function detectFaces($image)
     {
         $credentials = new Credentials(env('AWS_ACCESS_KEY_ID'), env('AWS_SECRET_ACCESS_KEY'));
@@ -114,7 +115,7 @@ class FaceValidationController extends Controller
 
     protected function isLive($faceDetails)
     {
-        if (isset($faceDetails['FaceDetails'][0])) {
+        if (isset($faceDetails['FaceDetails']) && count($faceDetails['FaceDetails']) == 1) {
             $face = $faceDetails['FaceDetails'][0];
 
             return $face['EyesOpen']['Value'] && $face['MouthOpen']['Value'] && !$face['Sunglasses']['Value'];

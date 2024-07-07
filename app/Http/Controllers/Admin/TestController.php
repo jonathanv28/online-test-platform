@@ -7,6 +7,7 @@ use App\Models\Test;
 use App\Models\Question;
 use App\Models\Answer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TestController extends Controller
@@ -43,7 +44,7 @@ class TestController extends Controller
             'duration' => $request->duration,
         ]);
 
-        return redirect()->route('admin.tests.index')->with('success', 'Test created successfully.');
+        return redirect()->route('admin.tests.index')->with('success', 'Test created successfully. ');
     }
 
     public function show($id)
@@ -82,38 +83,16 @@ class TestController extends Controller
         $test->duration = $request->duration;
         $test->save(); // Persist the updated test to the database
 
-        return redirect()->route('admin.tests.index')->with('success', 'Test updated successfully.');
+        return redirect()->route('admin.tests.index')->with('success', 'Test has been updated. ');
     }
 
     public function destroy(Test $test)
     {
-        $test->delete();
-        return redirect()->route('admin.tests.index')->with('success', 'Test deleted successfully.');
+        DB::transaction(function () use ($test) {
+            $test->results()->delete();
+            $test->delete();
+        });
+        return redirect()->route('admin.tests.index')->with('success-delete', 'Test has been deleted. ');
     }
-
-    public function addQuestion(Request $request, Test $test)
-{
-    $request->validate([
-        'question_text' => 'required|string',
-        'correct_answer' => 'required|char',
-        'options' => 'required|array',
-        'options.*.text' => 'required|string',
-        'options.*.is_correct' => 'required|boolean',
-    ]);
-
-    $question = $test->questions()->create([
-        'question_text' => $request->question_text,
-        'correct_answer' => $request->correct_answer,
-    ]);
-
-    foreach ($request->options as $option) {
-        $question->answers()->create([
-            'option_text' => $option['text'],
-            'is_correct' => $option['is_correct'],
-        ]);
-    }
-
-    return back()->with('success', 'Question added successfully.');
-}
 
 }

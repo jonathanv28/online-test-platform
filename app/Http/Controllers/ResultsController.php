@@ -43,7 +43,8 @@ class ResultsController extends Controller
         Result::create([
             'user_id' => auth()->id(),
             'test_id' => $test->id,
-            'score' => null, // This could be initialized or left to be updated later
+            'score' => null,
+            'status' => null,
         ]);
     
         return redirect()->back()->with('success', 'Test added successfully!');

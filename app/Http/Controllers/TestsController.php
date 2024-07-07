@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Test;
 use App\Models\Result;
 use App\Models\Answer;
+use App\Models\CheckingLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTestsRequest;
@@ -14,11 +15,6 @@ use Carbon\Carbon;
 
 class TestsController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
     public function validateFace(Test $test)
     {
         // Check if the test exists
@@ -32,26 +28,17 @@ class TestsController extends Controller
             abort(403, 'You are not enrolled in this test.');
         }
 
-        // Optionally check if the user has already passed face validation for this test session
-        $sessionKey = 'validated_for_test_' . $test->id;
-        if (session()->has($sessionKey)) {
-            // Optionally redirect to the test page directly if already validated
-            return redirect()->route('tests.show', ['test' => $test->id]);
-        }
-
         // Show the face validation view
         return view('tests.validate', [
             'test' => $test,
             'title' => 'Validate | Online Test Platform',
         ]);
     }
-    public function show(Test $test)
-    {
+    public function show(Test $test) {
         $user = Auth::user();
 
         // Check if the user has already started the test
         $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
-        $result->update(['start_time' => Carbon::now()]);
         if (!$result || !$result->start_time) {
             // Redirect to face validation if test not started
             return redirect()->route('tests.validate', ['test' => $test->id]);
@@ -72,21 +59,21 @@ class TestsController extends Controller
         ]);
     }
 
-    public function startTest(Test $test)
-    {
+    public function startTest(Test $test) {
         $user = Auth::user();
+        $status = 'in_progress';
+        // $result = Result::firstOrCreate(
+        //     ['user_id' => $user->id, 'test_id' => $test->id],
+        //     ['start_time' => Carbon::now()]
+        // );
 
-        // Start the test if not already started
-        $result = Result::firstOrCreate(
-            ['user_id' => $user->id, 'test_id' => $test->id],
-            ['start_time' => Carbon::now()]
-        );
+        Result::where('user_id', $user->id)->where('test_id', $test->id)
+        ->update(['status' => $status, 'start_time' => Carbon::now()]);   
 
         return redirect()->route('tests.show', ['test' => $test->id]);
     }
 
-    public function submit(Request $request, Test $test)
-    {
+    public function submit(Request $request, Test $test) {
         try {
             $user = Auth::user();
             $answers = $request->input('answers', []);
@@ -113,7 +100,7 @@ class TestsController extends Controller
         
             // Update the result with the score and end time
             Result::where('user_id', $user->id)->where('test_id', $test->id)
-                ->update(['score' => $scorePercentage, 'end_time' => Carbon::now()]);
+                ->update(['score' => $scorePercentage, 'end_time' => Carbon::now(), 'status' => 'done']);            
                 
             return response()->json(['success' => true, 'message' => 'Test submitted successfully.', 'testId' => $test->id]);
             // return redirect()->route('tests.result', ['test' => $test->id])->with('clear_timer', true);
@@ -124,8 +111,7 @@ class TestsController extends Controller
         }
     }
 
-    protected function calculateResults($answers, Test $test)
-    {
+    protected function calculateResults($answers, Test $test) {
         $score = 0;
         foreach ($answers as $questionId => $answerId) {
             $question = $test->questions()->find($questionId);
@@ -139,6 +125,7 @@ class TestsController extends Controller
     public function result(Request $request, Test $test) {
         $user = Auth::user();
         $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
+        $logs = CheckingLog::where('user_id', $user->id)->where('test_id', $test->id)->get();
 
         if (!$result) {
             return redirect()->route('home')->with('error', 'No result found for this test.');
@@ -148,7 +135,8 @@ class TestsController extends Controller
             'result' => $result,
             'test' => $result->tests,
             'user' => $user,
-            'title' => $test->title . ' | Online Test Platform'
+            'logs' => $logs,
+            'title' => 'Result | Online Test Platform'
 
         ]);
     }
@@ -160,7 +148,16 @@ class TestsController extends Controller
         }
     }
 
+    public function getStartTime(Test $test) {
+        $user = Auth::user();
+        $result = Result::where('user_id', $user->id)->where('test_id', $test->id)->first();
 
+        if ($result) {
+            return response()->json(['start_time' => $result->start_time]);
+        } else {
+            return response()->json(['error' => 'No result found for this test'], 404);
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      *

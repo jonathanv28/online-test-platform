@@ -45,7 +45,7 @@
                             </div>
                             <input type="text" name="name" id="name"
                                 class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                placeholder="ex. John Doe" autofocus required value="{{ old('name') }}">
+                                placeholder="Input Full Name" autofocus required value="{{ old('name') }}">
                         </div>
                     </div>
                     <div>
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div>
-                        <label for="idcard" class="block mb-2 text-sm font-normal text-gray-900">Identity Card (max. 2 MB)</label>
+                        <label for="idcard" class="block mb-2 text-sm font-normal text-gray-900">Identity Card <span class="text-xs text-gray-500">| PNG or JPG (max. 2MB)</span></label>
                         <div class="relative">
                             <input
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div>
-                        <label for="photo" class="block mb-2 text-sm font-normal text-gray-900">Self Photo (max. 2 MB)</label>
+                        <label for="photo" class="block mb-2 text-sm font-normal text-gray-900">Self Photo <span class="text-xs text-gray-500">| PNG or JPG (max. 2MB)</span></label>
                         <div class="relative">
                             <input
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"

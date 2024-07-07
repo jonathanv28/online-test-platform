@@ -15,10 +15,10 @@ class QuestionController extends Controller
         if (!$test) {
             abort(404, 'Test not found');
         }
-    
+
         $questions = $test->questions()->with('answers')->get();
         $title = 'Manage QnA | Online Test Platform';
-    
+
         return view('admin.tests.questions.index', compact('questions', 'title', 'test'));
     }
 
@@ -36,7 +36,7 @@ class QuestionController extends Controller
             'answers' => 'required|array',
             'correct_answer' => 'required|integer|min:1|max:4' // Assuming there are always four answers
         ]);
-    
+
         // Create the new question with a temporary null for correct_answer
         $question = new Question([
             'test_id' => $request->input('test_id'),
@@ -44,12 +44,12 @@ class QuestionController extends Controller
             'correct_answer' => 0  // Temporarily set to null
         ]);
         $question->save(); // Save the question to generate an ID for answers
-    
+
         // Create and save answers
         $answers = $request->input('answers');
         $correctAnswerIndex = $request->input('correct_answer') - 1;
         $correctAnswerId = null;
-    
+
         foreach ($answers as $index => $answerText) {
             $answer = new Answer([
                 'question_id' => $question->id,
@@ -61,17 +61,13 @@ class QuestionController extends Controller
                 $correctAnswerId = ($answer->id % 4 != 0 ? $answer->id % 4 : $answer->id % 4 + 4);
             }
         }
-    
-        // Update the correct answer ID in the question
+
         $question->correct_answer = $correctAnswerId;
         $question->save();
-    
+
         return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])
-                         ->with('success', 'Question and answers added successfully.');
+            ->with('success', 'Question and answers added successfully.');
     }
-    
-    
-    
 
     public function show(Question $question)
     {
@@ -94,7 +90,7 @@ class QuestionController extends Controller
 
         // Start by updating the question text
         $question->question_text = $request->question_text;
-        
+
         // Initialize a variable to keep track of the correct answer
         $correctAnswerId = null;
 
@@ -105,7 +101,7 @@ class QuestionController extends Controller
                 // Check if this is the correct answer
                 $answer->is_correct = ($request->correct_answer == $answer->id);
                 $answer->save();
-                
+
                 // If this is the correct answer, store its ID
                 if ($answer->is_correct) {
                     $correctAnswerId = $answer->id;
@@ -120,13 +116,12 @@ class QuestionController extends Controller
         $question->save();
 
         return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])
-                         ->with('success', 'Question and answers updated successfully.');
-        }
-
-        public function destroy(Question $question)
-        {
-            $question->delete();
-            return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully.');
-        }
+            ->with('success', 'Question and answers have been updated. ');
     }
 
+    public function destroy(Test $test, Question $question)
+    {
+        $question->delete();
+        return redirect()->route('admin.tests.questions.index', ['test' => $question->test_id])->with('success-delete', 'Question has been deleted. ');
+    }
+}

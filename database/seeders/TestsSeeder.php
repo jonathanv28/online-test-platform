@@ -19,7 +19,7 @@ class TestsSeeder extends Seeder
             'title' => 'Mathematics Test I',
             'code' => '744E80F',
             'image' => 'https://online-test-bucket-fyp1.s3.ap-southeast-2.amazonaws.com/tests/mathematics.jpg',
-            'duration' => '30'
+            'duration' => '90'
         ]);
         
         Test::create([

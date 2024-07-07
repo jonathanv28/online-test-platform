@@ -4,6 +4,43 @@
     <div data-aos="fade-up" class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 w-1/2">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <nav class="flex p-5" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                        <li class="inline-flex items-center">
+                            <a href="{{ route('admin.dashboard') }}"
+                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                                <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                                </svg>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                                <a href="{{ route('admin.tests.index') }}"
+                                    class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Manage
+                                    Tests</a>
+                            </div>
+                        </li>
+                        <li aria-current="page">
+                            <div class="flex items-center">
+                                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">{{ $test->title }}</span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
                 <div
                     class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                     <form action="{{ route('admin.tests.update', $test->id) }}" method="POST" enctype="multipart/form-data">
@@ -14,18 +51,13 @@
                             <label for="title" class="block mb-2 text-sm font-normal text-gray-900">Test Title</label>
                             <div class="relative mb-4">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="w-5 h-5 text-gray-500">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                        <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                        <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-                                    </svg>
+                                    <svg class="w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6.2V5h11v1.2M8 5v14m-3 0h6m2-6.8V11h8v1.2M17 11v8m-1.5 0h3"/>
+                                      </svg>
                                 </div>
                                 <input type="text" name="title" id="title"
-                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                    placeholder="ex. John Doe" required value="{{ old('title', $test->title) }}">
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                    placeholder="Input Test Title" required value="{{ old('title', $test->title) }}">
                             </div>
                             <div class="grid grid-cols-2 gap-6">
                                 <div>
@@ -33,18 +65,13 @@
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" class="w-5 h-5 text-gray-500">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                                <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-                                            </svg>
+                                            <svg class="w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V8a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1Zm0 0v2a4 4 0 0 1-4 4H5m14-6V8a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1Zm0 0v2a4 4 0 0 1-4 4h-1"/>
+                                              </svg>
                                         </div>
                                         <input type="text" name="code" id="code"
-                                            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                            placeholder="ex. John Doe" required value="{{ old('code', $test->code) }}">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                            placeholder="Input Test Code" required value="{{ old('code', $test->code) }}">
                                     </div>
                                 </div>
                                 <div>
@@ -58,21 +85,21 @@
                                               </svg>
                                         </div>
                                         <input type="number" name="duration" id="duration"
-                                            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                            placeholder="ex. John Doe" required
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                            placeholder="Input Test Duration" required
                                             value="{{ old('duration', $test->duration) }}">
                                     </div>
                                 </div>
                                 <div class="flex-col flex">
-                                    <label for="image-preview" class="block mb-2 text-sm font-normal text-gray-900">Image
+                                    <label for="imagepreview" class="block mb-2 text-sm font-normal text-gray-900">Image
                                         Preview</label>
                                     <img src="{{ $test->image }}" class="rounded-lg flex-grow object-cover"
-                                        id="image-preview" alt="{{ $test->title . 'photo' }}">
+                                        id="imagepreview" alt="{{ $test->title . 'photo' }}">
                                 </div>
                                 <div class="">
                                     <label for="dropzone" class="block mb-2 text-sm font-normal text-gray-900">Image
                                         Upload</label>
-                                    <label for="dropzone-file"
+                                    <label for="dropzonefile"
                                         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                         id="dropzone">
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -86,7 +113,7 @@
                                                     class="font-semibold">Click to upload</span> or drag and drop</p>
                                             <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 2MB)</p>
                                         </div>
-                                        <input id="dropzone-file" type="file" class="hidden" name="image" />
+                                        <input id="dropzonefile" type="file" class="hidden" name="image" />
                                     </label>
                                 </div>
                             </div>
@@ -97,16 +124,15 @@
                                 </button>
                             </div>
                         </form>
-                        <form action="{{ route('admin.tests.destroy', $test->id) }}" method="POST"
-                            onsubmit="return confirm('Are you sure?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="focus:outline-none text-red-700 bg-white-700 hover:bg-red hover:text-white hover:bg-red-700 border border-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-                                Delete Test
-                            </button>
-                        </form>
                 </div>
             </div>
         </div>
+        <script>
+            dropzonefile.onchange = evt => {
+                const [file] = dropzonefile.files
+                if (file) {
+                    imagepreview.src = URL.createObjectURL(file)
+                }
+            }
+        </script>
     @endsection

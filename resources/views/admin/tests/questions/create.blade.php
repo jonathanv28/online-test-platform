@@ -52,11 +52,11 @@
                                 Answer:</label>
                             <select name="correct_answer" id="correct_answer"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-3.5 py-2.5 mb-6" required>
-                                <option value="" disabled selected>Select Answer</option>
-                                <option value="1">Answer 1</option>
-                                <option value="2">Answer 2</option>
-                                <option value="3">Answer 3</option>
-                                <option value="4">Answer 4</option>
+                                <option value="" disabled selected>Select Option</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                                <option value="4">Option 4</option>
                             </select>
                             
                         </div>

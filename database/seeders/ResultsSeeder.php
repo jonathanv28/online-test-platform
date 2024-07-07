@@ -16,6 +16,14 @@ class ResultsSeeder extends Seeder
     public function run()
     {
         Result::create([
+            'user_id' => '2',
+            'test_id' => '1',
+            'score' => '100',
+            'start_time' => '2024-07-03 13:05:02',
+            'end_time' => '2024-07-03 13:08:05',
+        ]);
+
+        Result::create([
             'user_id' => '1',
             'test_id' => '1',
         ]);

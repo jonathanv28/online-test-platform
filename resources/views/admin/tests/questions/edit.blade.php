@@ -14,7 +14,7 @@
                                     <path
                                         d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                                 </svg>
-                                Home
+                                Dashboard
                             </a>
                         </li>
                         <li>
@@ -98,16 +98,6 @@
                                     Question
                                 </button>
                             </div>
-                    </form>
-                    <form
-                        action="{{ route('admin.tests.questions.destroy', ['test' => $test->id, 'question' => $question->id]) }}"
-                        method="POST" onsubmit="return confirm('Are you sure?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="focus:outline-none text-red-700 bg-white-700 hover:bg-red hover:text-white hover:bg-red-700 border border-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-                            Delete Question
-                        </button>
                     </form>
                 </div>
             </div>
