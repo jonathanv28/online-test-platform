@@ -2,7 +2,7 @@
 
 @section('content')
     <div data-aos="fade-up" class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 w-1/2">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 2xl:w-1/2 sm:w-4/5 lg:w-2/3">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <nav class="flex p-5" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -57,7 +57,7 @@
                     class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                     <form
                         action="{{ route('admin.tests.questions.update', ['test' => $test->id, 'question' => $question->id]) }}"
-                        method="POST">
+                        method="POST" id="edit-form">
                         @csrf
                         @method('PUT')
                         <div>
@@ -93,7 +93,7 @@
                             @endforeach
 
                             <div class="mt-4">
-                                <button type="submit"
+                                <button type="submit" id="submit-edit-form"
                                     class="transition duration-200 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Update
                                     Question
                                 </button>

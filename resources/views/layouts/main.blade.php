@@ -29,6 +29,7 @@
         }
         /* .question-nav-btn.answered {
             border-top: 4px solid green;
+            border: green;
         } */
         @keyframes slideInRight {
             from {

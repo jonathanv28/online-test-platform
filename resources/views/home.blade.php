@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.homemain')
 
 @php
     $enrolledTests = auth()->user()->results;
@@ -76,7 +76,7 @@
         @if ($inProgressTest)
             <div data-aos="fade-up" data-aos-duration="650"
                 class="max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <img class="rounded-t-lg object-cover h-56" src="{{ $inProgressTest->tests->image }}" alt=""
+                <img class="rounded-t-lg object-cover h-56 mx-auto" src="{{ $inProgressTest->tests->image }}" alt=""
                     draggable="false" />
                 <div class="p-5">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -102,12 +102,14 @@
             </div>
         @else
             @if ($enrolledTests)
-                <div class="grid grid-cols-5 gap-6">
+                <div class="grid grid-cols-3 xl:grid-cols-5 gap-6" id="test-list">
                     @foreach ($enrolledTests as $enrolled)
                         <div data-aos="fade-up" data-aos-duration="650"
                             class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <img class="rounded-t-lg object-cover h-56" src="{{ $enrolled->tests->image }}"
-                                alt="" draggable="false" />
+                            <div class="">
+                                <img class="rounded-t-lg object-fill h-56 mx-auto" src="{{ $enrolled->tests->image }}"
+                                    alt="" draggable="false" />
+                            </div>
                             <div class="p-5">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                     {{ $enrolled->tests->title }}</h5>

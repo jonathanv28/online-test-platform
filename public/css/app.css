@@ -1507,6 +1507,12 @@ input:checked + .toggle-bg {
 .list-none {
   list-style-type: none;
 }
+.auto-cols-auto {
+  grid-auto-columns: auto;
+}
+.grid-flow-col {
+  grid-auto-flow: column;
+}
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
@@ -1859,6 +1865,10 @@ input:checked + .toggle-bg {
 .bg-gray-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+.bg-blue-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 66 159 / var(--tw-bg-opacity));
 }
 .object-contain {
   -o-object-fit: contain;
@@ -2558,6 +2568,18 @@ input:checked + .toggle-bg {
     height: 5rem;
   }
 
+  .sm\:w-full {
+    width: 100%;
+  }
+
+  .sm\:w-2\/3 {
+    width: 66.666667%;
+  }
+
+  .sm\:w-4\/5 {
+    width: 80%;
+  }
+
   .sm\:translate-x-0 {
     --tw-translate-x: 0px;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -2667,6 +2689,10 @@ input:checked + .toggle-bg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .md\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
   .md\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(0px * var(--tw-space-x-reverse));
@@ -2707,6 +2733,22 @@ input:checked + .toggle-bg {
 
 @media (min-width: 1024px) {
 
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
+  .lg\:w-2\/3 {
+    width: 66.666667%;
+  }
+
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
   .lg\:flex-col {
     flex-direction: column;
   }
@@ -2733,13 +2775,36 @@ input:checked + .toggle-bg {
 
 @media (min-width: 1280px) {
 
+  .xl\:w-1\/2 {
+    width: 50%;
+  }
+
+  .xl\:w-2\/3 {
+    width: 66.666667%;
+  }
+
   .xl\:grid-cols-6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .xl\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .xl\:px-32 {
     padding-left: 8rem;
     padding-right: 8rem;
+  }
+}
+
+@media (min-width: 1536px) {
+
+  .\32xl\:w-1\/2 {
+    width: 50%;
+  }
+
+  .\32xl\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 

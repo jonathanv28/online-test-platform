@@ -2,11 +2,11 @@
 
 @section('content')
     <div data-aos="fade-up" class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 w-1/2">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 2xl:w-1/2 sm:w-4/5 lg:w-2/3">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div
                     class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-                    <form action="{{ route('admin.tests.questions.store', $test->id) }}" method="POST">
+                    <form action="{{ route('admin.tests.questions.store', $test->id) }}" method="POST" id="create-form">
                         @csrf
                         <h5 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Add Question
                             for <span class="underline decoration-blue-500">{{ $test->title }}</span></h5>
@@ -61,7 +61,7 @@
                             
                         </div>
                         <div class="">
-                            <button type="submit"
+                            <button type="submit" id="submit-create-form"
                                 class="transition duration-200 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add
                                 Question
                             </button>
