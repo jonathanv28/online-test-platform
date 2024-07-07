@@ -16,9 +16,6 @@ class AdminsSeeder extends Seeder
      */
     public function run()
     {
-        Admin::create([
-            'username' => 'online-test-admin',
-            'password' => Hash::make('jagdisbzkagd'),
-        ]);
+        //
     }
 }
