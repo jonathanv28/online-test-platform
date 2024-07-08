@@ -133,8 +133,8 @@
                                 </div>
                                 @if ($enrolled->score || $enrolled->score === 0)
                                     <a href="{{ route('tests.result', $enrolled->tests->id) }}"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center transition duration-200 text-white bg-blue-700 hover:bg-blue-900 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-200"
-                                    >View Result
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center transition duration-200 text-white bg-blue-700 hover:bg-blue-900 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-200">View
+                                        Result
                                     </a>
                                 @else
                                     <button

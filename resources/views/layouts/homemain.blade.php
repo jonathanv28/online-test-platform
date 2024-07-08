@@ -78,7 +78,7 @@
                 </div>
             </div>
         @endif
-        @if (session()->has('success-delete'))
+        @if (session()->has('error'))
             <div class="absolute bottom-4 right-4 z-50" id="toast-container">
                 <div id="toast-success"
                     class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800"
@@ -92,7 +92,7 @@
                         </svg>
                         <span class="sr-only">Error icon</span>
                     </div>
-                    <div class="ms-3 text-sm font-normal">{{ session('success-delete') }}</div>
+                    <div class="ms-3 text-sm font-normal">{{ session('error') }}</div>
                 </div>
             </div>
         @endif
@@ -103,10 +103,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             AOS.init();
         });
     </script>
+
     <script>
         setTimeout(() => {
             const toast = document.getElementById('toast-container');
@@ -118,7 +119,7 @@
             }
         }, 5000);
     </script>
-    
+
     {{-- @include('partials.footer') --}}
 </body>
 

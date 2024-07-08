@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Test;
 use App\Models\Result;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreResultsRequest;
 use App\Http\Requests\UpdateResultsRequest;
 
 class ResultsController extends Controller
@@ -36,9 +35,19 @@ class ResultsController extends Controller
      * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreResultsRequest $request)
-    {
-        $test = Test::where('code', $request->code)->firstOrFail();
+    public function store(Request $request)
+    {        
+        $test = Test::where('code', $request->code)->first();
+
+        if (!$test) {
+            return redirect()->back()->with('error', 'The provided test code does not exist!');
+        }
+
+        $existingResult = Result::where('user_id', auth()->id())->where('test_id', $test->id)->first();
+
+        if ($existingResult) {
+            return redirect()->back()->with('error', 'You have already added this test!');
+        }
     
         Result::create([
             'user_id' => auth()->id(),
