@@ -5,12 +5,52 @@
         <div
             class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 2xl:w-1/2 sm:w-4/5 lg:w-2/3">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <nav class="flex p-5" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                        <li class="inline-flex items-center">
+                            <a href="{{ route('admin.dashboard') }}"
+                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                                <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                                </svg>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                                <a href="{{ route('admin.tests.index') }}"
+                                    class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Manage
+                                    Tests</a>
+                            </div>
+                        </li>
+                        <li aria-current="page">
+                            <div class="flex items-center">
+                                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Add
+                                    Test</span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
                 <div
                     class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-                    <form action="{{ route('admin.tests.store') }}" method="POST" enctype="multipart/form-data" id="create-form">
+                    <form action="{{ route('admin.tests.store') }}" method="POST" enctype="multipart/form-data"
+                        id="create-form">
                         @csrf
                         <div>
-                            <h5 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Test</h5>
+                            <h5 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Test
+                            </h5>
                             <label for="title" class="block mb-2 text-sm font-normal text-gray-900">Test Title</label>
                             <div class="relative mb-4">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -78,15 +118,16 @@
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                             <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
                                                     d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                             </svg>
                                             <p class="mb-2 text-sm text-gray-500 text-center"><span
                                                     class="font-semibold">Click to upload</span> or drag and drop</p>
                                             <p class="text-xs text-gray-500 text-center">PNG, JPG (MAX. 2MB)</p>
                                         </div>
-                                        <input id="dropzonefile" type="file" class="hidden" name="image" required/>
+                                        <input id="dropzonefile" type="file" class="hidden" name="image"
+                                            required />
                                     </label>
                                 </div>
                             </div>
