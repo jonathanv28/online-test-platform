@@ -65,10 +65,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tests as $test)
+                    @foreach ($tests as $index => $test)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-4">
-                            {{ $loop->iteration }}
+                            {{ $tests->firstItem() + $index }}
                         </td>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $test->title }}
@@ -137,6 +137,9 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="m-4">
+            {{ $tests->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 </div>

@@ -48,15 +48,15 @@
                             Test(s) Enrolled
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Test Logs
+                            View Results
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($users as $index => $user)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-4">
-                            {{ $loop->iteration }}
+                            {{ $users->firstItem() + $index }}
                         </td>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $user->name }}
@@ -77,6 +77,9 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="m-4">
+            {{ $users->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 </div>

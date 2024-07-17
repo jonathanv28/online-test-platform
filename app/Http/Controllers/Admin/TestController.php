@@ -14,7 +14,7 @@ class TestController extends Controller
 {
     public function index()
     {
-        $tests = Test::all();
+        $tests = Test::latest()->paginate(10);
         $title = 'Manage Tests | Online Test Platform';
         return view('admin.tests.index', compact('tests', 'title'));
     }
@@ -28,10 +28,10 @@ class TestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:100',
+            'title' => 'required|string|max:30',
+            'code' => 'required|string|max:8|unique:tests,code',
             'image' => 'required|image',
-            'duration' => 'required|integer'
+            'duration' => 'required|integer|min:1|max:120'
         ]);
 
         $imagePath = $request->file('image')->store('tests', 's3');
@@ -65,10 +65,10 @@ class TestController extends Controller
     public function update(Request $request, Test $test)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:100',
+            'title' => 'required|string|max:30',
+            'code' => 'required|string|max:8|unique:tests,code,' . $test->id,
             'image' => 'sometimes|image',
-            'duration' => 'required|integer'
+            'duration' => 'required|integer|min:1|max:120'
         ]);
 
         // Handle the image upload if there's one

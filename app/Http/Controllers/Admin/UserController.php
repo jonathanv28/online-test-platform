@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->paginate(10);
         $title = 'Manage Users | Online Test Platform';
         return view('admin.users.index', compact('users', 'title'));
     }
@@ -29,8 +29,8 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'name' => 'required|string|max:30',
+            'email' => 'required|email|max:50|unique:users,email,' . $user->id,
             'photo' => 'nullable|image|max:2048',
             'idcard' => 'nullable|image|max:2048',
         ]);
@@ -67,12 +67,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success-delete', 'User deleted successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 
     public function indexLogs()
     {
-        $users = User::with('results')->get();
+        $users = User::whereHas('results')->with('results')->orderBy('created_at', 'desc')->paginate(5);
         $title = 'Users Log | Online Test Platform';
         return view('admin.users.logs.index', compact('users', 'title'));
     }

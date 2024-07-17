@@ -43,12 +43,24 @@ class UsersController extends Controller
 
         $rekognition = $this->getRekognitionClient();
 
+        if (!$this->hasSingleFace($idcardImage, $rekognition)) {
+            unlink($idcardPath);
+            unlink($photoPath);
+            return back()->withErrors('ID Card image must contain exactly one face.')->withInput();
+        }
+
+        if (!$this->hasSingleFace($photoImage, $rekognition)) {
+            unlink($idcardPath);
+            unlink($photoPath);
+            return back()->withErrors('Photo image must contain exactly one face.')->withInput();
+        }
+
         $facesMatch = $this->compareFaces($idcardImage, $photoImage, $rekognition);
 
         if (!$facesMatch) {
             unlink($idcardPath);
             unlink($photoPath);
-            return back()->withErrors('ID Card verification failed.')->withInput();
+            return back()->withErrors('ID Card and Photo verification failed. Face did not match.')->withInput();
         }
 
         $idcardUrl = $this->storeFileToS3($idcardPath, 'users');
@@ -99,6 +111,16 @@ class UsersController extends Controller
             'region' => env('AWS_DEFAULT_REGION'),
             'credentials' => $credentials
         ]);
+    }
+
+    private function hasSingleFace($image, $rekognition)
+    {
+        $result = $rekognition->detectFaces([
+            'Image' => ['Bytes' => $image],
+            'Attributes' => ['ALL']
+        ]);
+
+        return count($result['FaceDetails']) === 1;
     }
 
     private function compareFaces($idCardImage, $photoImage, $rekognition)

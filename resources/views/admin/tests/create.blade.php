@@ -84,6 +84,9 @@
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                                             placeholder="Input Test Code" required value="{{ old('code') }}">
                                     </div>
+                                     @error('code')
+                                        <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="duration" class="block mb-2 text-sm font-normal text-gray-900">Duration (in
@@ -102,6 +105,9 @@
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                                             placeholder="Input Test Duration" required value="{{ old('duration') }}">
                                     </div>
+                                    @error('duration')
+                                        <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="flex-col flex">
                                     <label for="imagepreview" class="block mb-2 text-sm font-normal text-gray-900">Image
@@ -126,9 +132,11 @@
                                                     class="font-semibold">Click to upload</span> or drag and drop</p>
                                             <p class="text-xs text-gray-500 text-center">PNG, JPG (MAX. 2MB)</p>
                                         </div>
-                                        <input id="dropzonefile" type="file" class="hidden" name="image"
-                                            required />
+                                        <input id="dropzonefile" type="file" class="hidden" name="image"/>
                                     </label>
+                                    @error('image')
+                                        <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="mt-4">

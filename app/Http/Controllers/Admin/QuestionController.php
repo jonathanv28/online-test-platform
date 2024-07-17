@@ -16,7 +16,7 @@ class QuestionController extends Controller
             abort(404, 'Test not found');
         }
 
-        $questions = $test->questions()->with('answers')->get();
+        $questions = $test->questions()->with('answers')->paginate(5);
         $title = 'Manage QnA | Online Test Platform';
 
         return view('admin.tests.questions.index', compact('questions', 'title', 'test'));
@@ -32,7 +32,7 @@ class QuestionController extends Controller
     {
         $request->validate([
             'test_id' => 'required|exists:tests,id',
-            'question_text' => 'required|string',
+            'question_text' => 'required|string|max:255',
             'answers' => 'required|array',
             'correct_answer' => 'required|integer|min:1|max:4' // Assuming there are always four answers
         ]);
@@ -83,7 +83,7 @@ class QuestionController extends Controller
     public function update(Request $request, Test $test, Question $question)
     {
         $request->validate([
-            'question_text' => 'required|string',
+            'question_text' => 'required|string|max:255',
             'answers' => 'required|array',
             'correct_answer' => 'required|integer|exists:answers,id',
         ]);

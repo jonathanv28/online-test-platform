@@ -37,7 +37,7 @@ class ResultsController extends Controller
      */
     public function store(Request $request)
     {        
-        $test = Test::where('code', $request->code)->first();
+        $test = Test::whereRaw('BINARY `code` = ?', [$request->code])->first();
 
         if (!$test) {
             return redirect()->back()->with('error', 'The provided test code does not exist!');

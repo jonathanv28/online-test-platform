@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const questions = document.querySelectorAll('.question');
     let currentQuestionIndex = 0;
-    const intervalTime = 5500;
+    const monitorIntervalTime = 2000; //  monitoring
+    const logsCheckIntervalTime = 1000; // checking logs
     let suspiciousActivityInterval;
     let lastLogTimestamp = null; // To track the last log's timestamp
 
@@ -189,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
-    const interval = 5000;
+    const interval = monitorIntervalTime;
 
     function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: true, aspectRatio: 1.777 })
@@ -253,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error checking logs:', error));
     }
 
-    suspiciousActivityInterval = setInterval(checkForSuspiciousActivity, intervalTime);
+    suspiciousActivityInterval = setInterval(checkForSuspiciousActivity, logsCheckIntervalTime);
 
     startCamera();
     initializeTimer();
